@@ -16,7 +16,8 @@ exported.push(D03_LaPosteConfig());
 exported.push(D04_PharmaciesConfig());
 
 // 05 - Arrets de bus RATP
-exported.push(D05_BusArretsConfig());
+// !!! Not accessible
+// exported.push(D05_BusArretsConfig());
 
 // 05 - Autolib
 exported.push(D06_AutoLibConfig());
