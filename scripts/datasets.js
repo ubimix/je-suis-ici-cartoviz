@@ -3,38 +3,54 @@ var Utils = require('./transform-utils');
 
 var exported = module.exports = [];
 
-// // 01 - Musee
-// exported.push(D01_MuseumConfig());
-//
-// // 02 - Hopitaux
-// exported.push(D02_HospitalsConfig());
-//
-// // 03 - Poste (points de contact)
-// exported.push(D03_LaPosteConfig());
-//
-// // 04 - Pharmacie
-// exported.push(D04_PharmaciesConfig());
-//
-// // 05 - Arrets de bus RATP
-// exported.push(D05_BusArretsConfig());
-//
-// // 05 - Autolib
-// exported.push(D06_AutoLibConfig());
-//
-// // 07 - Positions géographiques des stations du réseau RATP
-// exported.push(D07_StationRATP());
-//
-// // 08 - Commissariat de Police
-// exported.push(D08_Police());
-//
-// // 09 - Monuments
-// exported.push(D09_Monuments());
-//
-// // 10 - Gare SNCF transilien
-exported.push(D10_GaresSNCF());
+// 01 - Musee
+exported.push(D01_MuseumConfig());
+
+// 02 - Hopitaux
+exported.push(D02_HospitalsConfig());
+
+// 03 - Poste (points de contact)
+exported.push(D03_LaPosteConfig());
+
+// 04 - Pharmacie
+exported.push(D04_PharmaciesConfig());
+
+// 05 - Arrets de bus RATP
+exported.push(D05_BusArretsConfig());
+
+// 05 - Autolib
+exported.push(D06_AutoLibConfig());
+
+// 07 - Positions géographiques des stations du réseau RATP
+exported.push(D07_StationRATP());
+
+// 08 - Commissariat de Police
+exported.push(D08_Police());
 
 // 09 - Velib
-// exported.push(D09_Velib());
+exported.push(D09_Velib());
+
+// 10 - Monuments
+exported.push(D10_Monuments());
+
+// 11 - Gare SNCF transilien
+exported.push(D11_GaresSNCF());
+
+// 12 - Sanisettes
+exported.push(D12_Sanisettes());
+
+// 13 - Kiosques à journaux
+exported.push(D13_Kiosques());
+
+// // 15 - Marchés de quartier
+// // !!! No coordinates
+// //exported.push(D15_Marches());
+
+// 16 - Espaces verts, crèches, piscines, équipements sportifs
+exported.push(D16_EspacesVerts());
+
+// 17 - Liste des sites des hotspots Paris WiFi
+exported.push(D17_SiteWifi());
 
 // // 24 - Mobiliers urbains de propreté - Emplacements des colonnes à verre
 // exported.push(D24_MobilierParisConfig());
@@ -269,20 +285,13 @@ function D07_StationRATP() {
                     'place', 'station_type' ]
         },
         transform : function(obj) {
-            try {
-                return {
-                    type : 'Feature',
-                    properties : _.extend({
-                        type : 'RatpStation'
-                    }, this._toProperties(obj, PropertiesConfig)),
-                    geometry : {
-                        type : 'Point',
-                        coordinates : [ parseFloat(obj.longitude),
-                                parseFloat(obj.latitude) ]
-                    }
-                }
-            } catch (e) {
-                return undefined;
+            return {
+                type : 'Feature',
+                properties : _.extend({
+                    type : 'RatpStation'
+                }, this._toProperties(obj, PropertiesConfig)),
+                geometry : this._toGeometryPointFromCoords(obj, 'latitude',
+                        'longitude')
             }
         }
     });
@@ -315,8 +324,33 @@ function D08_Police() {
 
 /* ------------------------------------------------------------ */
 
-// 09 - Monuments
-function D09_Monuments() {
+// 09 - Velib
+function D09_Velib() {
+    return Utils
+            .newDataSet({
+                "path" : "velos_en_libre-service_en_ile-de-france.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/velos_en_libre-service_en_ile-de-france/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'Velib'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'latitude', 'longitude', 'wgs84' ],
+                            convert : {
+                                'name' : 'label'
+                            }
+                        })),
+                        geometry : this._toGeometry(obj.wgs84)
+                    }
+                }
+            });
+}
+
+/* ------------------------------------------------------------ */
+
+// 10 - Monuments
+function D10_Monuments() {
     return Utils
             .newDataSet({
                 "path" : "monuments-inscrits-ou-classes-dile-de-france.csv",
@@ -345,8 +379,8 @@ function D09_Monuments() {
 
 /* ------------------------------------------------------------ */
 
-// // 10 - Gare SNCF transilien
-function D10_GaresSNCF() {
+// // 11 - Gare SNCF transilien
+function D11_GaresSNCF() {
     return Utils
             .newDataSet({
                 "path" : "sncf-gares-et-arrets-transilien-ile-de-france.csv",
@@ -377,29 +411,133 @@ function D10_GaresSNCF() {
 
 /* ------------------------------------------------------------ */
 
-// 09 - Velib
-function D09_Velib() {
+// 12 - Sanisettes
+function D12_Sanisettes() {
     return Utils
             .newDataSet({
-                "path" : "velos_en_libre-service_en_ile-de-france.csv",
-                "url" : "http://data.iledefrance.fr/explore/dataset/velos_en_libre-service_en_ile-de-france/download?format=csv",
+                "path" : "sanisettesparis2011.csv",
+                "url" : "http://parisdata.opendatasoft.com/explore/dataset/sanisettesparis2011/download?format=csv",
                 transform : function(obj) {
                     return {
                         type : 'Feature',
                         properties : _.extend({
-                            type : 'Velib'
+                            type : 'Sanisette'
                         }, this._toProperties(obj, {
-                            exclude : [ 'latitude', 'longitude', 'wgs84' ],
+                            exclude : [ 'geom', 'geom_x_y' ],
                             convert : {
-                                'name' : 'label'
-                            }
+                                'libelle' : 'label'
+                            },
+                            dataTypes : {}
                         })),
-                        geometry : this._toGeometry(obj.wgs84)
+                        geometry : this._toGeometry(obj.geom)
                     }
                 }
             });
 }
 
+/* ------------------------------------------------------------ */
+
+// 13 - Kiosques à journaux
+function D13_Kiosques() {
+    return Utils
+            .newDataSet({
+                "path" : "carte-des-kiosques-presse-a-paris.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/carte-des-kiosques-presse-a-paris/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'Kiosque'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'lat', 'lng' ],
+                            convert : {
+                                'libelle' : 'label'
+                            },
+                            dataTypes : {}
+                        })),
+                        geometry : this._toGeometryPointFromCoords(obj, 'lat',
+                                'lng')
+                    }
+                }
+            });
+}
+
+/* ------------------------------------------------------------ */
+
+//
+// 15 - Marchés de quartier
+// !!! No geographic coordinates
+function D15_Marches() {
+    return Utils
+            .newDataSet({
+                "path" : "marches-a-paris.csv",
+                "url" : "http://opendata.paris.fr/opendata/document?id=134&id_attribute=64",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'Marche'
+                        }, this._toProperties(obj, {
+                            convert : {},
+                            dataTypes : {}
+                        })),
+                        geometry : this._toGeometryPointFromCoords(obj, 'lat',
+                                'lng')
+                    }
+                }
+            });
+}
+/* ------------------------------------------------------------ */
+
+//
+// 16 - Espaces verts, crèches, piscines, équipements sportifs
+function D16_EspacesVerts() {
+    return Utils
+            .newDataSet({
+                "path" : "paris_-_liste_des_equipements_de_proximite_ecoles_piscines_jardins.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/paris_-_liste_des_equipements_de_proximite_ecoles_piscines_jardins/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'EspacePublique'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'wgs84' ],
+                            convert : {
+                                'designation_longue' : 'label'
+                            },
+                            dataTypes : {}
+                        })),
+                        geometry : this._toGeometryPoint(obj.wgs84)
+                    }
+                }
+            });
+}
+/* ------------------------------------------------------------ */
+
+// 17 - Liste des sites des hotspots Paris WiFi
+function D17_SiteWifi() {
+    return Utils
+            .newDataSet({
+                "path" : "liste_des_sites_des_hotspots_paris_wifi.csv",
+                "url" : "http://public.opendatasoft.com/explore/dataset/liste_des_sites_des_hotspots_paris_wifi/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'SpotWifi'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'geo_coordinates' ],
+                            convert : {
+                                'nom_site' : 'label'
+                            },
+                            dataTypes : {}
+                        })),
+                        geometry : this._toGeometryPoint(obj.geo_coordinates)
+                    }
+                }
+            });
+}
 /* ------------------------------------------------------------ */
 
 function D24_MobilierParisConfig() {

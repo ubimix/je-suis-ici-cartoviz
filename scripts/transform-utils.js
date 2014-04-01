@@ -37,6 +37,17 @@ function newDataSet(dataset) {
                         return undefined;
                     }
                 },
+                _toGeometryPointFromCoords : function(obj, latField, lonField) {
+                    try {
+                        return {
+                            type : 'Point',
+                            coordinates : [ parseFloat(obj[lonField]),
+                                    parseFloat(obj[latField]) ]
+                        }
+                    } catch (e) {
+                        return undefined;
+                    }
+                },
                 _transformValue : function(value, type) {
                     var methodName = '_to' + type[0].toUpperCase()
                             + type.substring(1);
