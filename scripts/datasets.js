@@ -22,11 +22,19 @@ var exported = module.exports = [];
 // exported.push(D06_AutoLibConfig());
 //
 // // 07 - Positions géographiques des stations du réseau RATP
-exported.push(D07_StationRATP());
+// exported.push(D07_StationRATP());
 //
 // // 08 - Commissariat de Police
 // exported.push(D08_Police());
 //
+// // 09 - Monuments
+// exported.push(D09_Monuments());
+//
+// // 10 - Gare SNCF transilien
+exported.push(D10_GaresSNCF());
+
+// 09 - Velib
+// exported.push(D09_Velib());
 
 // // 24 - Mobiliers urbains de propreté - Emplacements des colonnes à verre
 // exported.push(D24_MobilierParisConfig());
@@ -300,6 +308,93 @@ function D08_Police() {
                             }
                         })),
                         geometry : this._toGeometryPoint(obj.coordinates)
+                    }
+                }
+            });
+}
+
+/* ------------------------------------------------------------ */
+
+// 09 - Monuments
+function D09_Monuments() {
+    return Utils
+            .newDataSet({
+                "path" : "monuments-inscrits-ou-classes-dile-de-france.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/monuments-inscrits-ou-classes-dile-de-france/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'Monument'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'geo_shape', 'geo_point_2d', 'dat' ],
+                            convert : {
+                                'intitule' : 'label',
+                                'type' : '_type'
+                            },
+                            dataTypes : {
+                                'date' : 'dateDDMMYYYY',
+                                'dat' : 'date'
+                            }
+                        })),
+                        geometry : this._toGeometry(obj.geo_shape)
+                    }
+                }
+            });
+}
+
+/* ------------------------------------------------------------ */
+
+// // 10 - Gare SNCF transilien
+function D10_GaresSNCF() {
+    return Utils
+            .newDataSet({
+                "path" : "sncf-gares-et-arrets-transilien-ile-de-france.csv",
+                "url" : "http://ressources.data.sncf.com/explore/dataset/sncf-gares-et-arrets-transilien-ile-de-france/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'GaresSNCF'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'coord_gps_wgs84',
+                                    'y_lambert_ii_etendu',
+                                    'x_lambert_ii_etendu' ],
+                            convert : {
+                                'libelle_point_d_arret' : 'label',
+                                'type' : '_type'
+                            },
+                            dataTypes : {
+                                'zone_navigo' : 'integer',
+                                'gare_non_sncf' : 'boolean'
+                            }
+                        })),
+                        geometry : this._toGeometryPoint(obj.coord_gps_wgs84)
+                    }
+                }
+            });
+}
+
+/* ------------------------------------------------------------ */
+
+// 09 - Velib
+function D09_Velib() {
+    return Utils
+            .newDataSet({
+                "path" : "velos_en_libre-service_en_ile-de-france.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/velos_en_libre-service_en_ile-de-france/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'Velib'
+                        }, this._toProperties(obj, {
+                            exclude : [ 'latitude', 'longitude', 'wgs84' ],
+                            convert : {
+                                'name' : 'label'
+                            }
+                        })),
+                        geometry : this._toGeometry(obj.wgs84)
                     }
                 }
             });

@@ -60,7 +60,7 @@ function readCsv(file, callback, options) {
     var deferred = Q.defer();
     try {
         var first = true;
-        headers = options.headers;
+        var headers = options.headers;
         options = options || {
             delim : ','
         };
