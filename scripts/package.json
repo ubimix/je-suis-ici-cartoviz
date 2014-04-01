@@ -6,7 +6,8 @@
         "underscore" : "*",
         "q" : "*",
         "superagent" : "*",
-        "cheerio" : "*"
+        "cheerio" : "*",
+        "terraformer-wkt-parser" : "*"
     },
     "scripts" : {
         "run" : "node download-all.js"
