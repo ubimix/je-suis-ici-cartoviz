@@ -1,0 +1,18 @@
+{
+    "name" : "mosaic",
+    "version" : "0.0.1",
+    "dependencies" : {
+        "bootstrap" : "*",
+        "font-awesome" : "*",
+        "jquery" : "*",
+        "q" : "*",
+        "underscore" : "*",
+        "requirejs" : "*",
+        "requirejs-text" : "*"
+        "mosaic-ui" : "git://github.com/ubimix/mosaic-ui.git#212697dda56e491b27b603c53b802e02c2c266b4"
+    },
+    "devDependencies" : {
+        "mocha" : "*",
+        "expect" : "*"
+    }
+}

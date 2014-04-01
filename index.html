@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1"></meta>
+<meta charset="utf-8"></meta>
+
+<!-- External CSS styles -->
+<link rel="stylesheet" href="./libs/leaflet/leaflet.css" />
+<!--[if lte IE 8]><link rel="stylesheet" href="./libs/leaflet/leaflet.ie.css" /><![endif]-->
+<!-- JavaScript libraries -->
+<script type="text/javascript" src="./libs/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="./libs/leaflet/leaflet.js"></script>
+<script type="text/javascript"
+	src="./libs/leaflet.utfgrid/leaflet.utfgrid.js"></script>
+
+<!-- Specific CSS styles -->
+<style type="text/css">
+html,body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#map {
+	background-color: white;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+#info {
+	background-color: white;
+	border: 1px solid silver;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 200px;
+	padding: 1em;
+	position: absolute;
+}
+
+p,h3 {
+	margin: 0.5em 0;
+}
+</style>
+
+<script type="text/javascript" src="./index.js"></script>
+
+</head>
+<body>
+
+	<div id="map" data-center="[35.460669951495305, -29.8828125]"
+		data-zoom="2" data-min-zoom="1" data-max-zoom="18"
+		data-tiles-url="/tiles/project/{z}/{x}/{y}.png"
+		data-utfgrid-url="/tiles/project/{z}/{x}/{y}.grid.json?callback={cb}">
+		<div class="attribution">
+			Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
+			contributors
+		</div>
+	</div>
+
+	<div id="info" style="display: none;">
+		<h3>
+			<span class="name" data-placeholder="ADMIN"></span> (<span
+				class="abbrev" data-placeholder="ABBREV"></span>)
+		</h3>
+		<p>
+			Type: <span class="type" data-placeholder="TYPE"></span>
+		</p>
+		<p>
+			Post Code: <span class="postcode" data-placeholder="POSTAL"></span>
+		</p>
+	</div>
+</body>
+</html>
