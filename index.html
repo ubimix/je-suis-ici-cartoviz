@@ -10,6 +10,7 @@
 <!--[if lte IE 8]><link rel="stylesheet" href="./libs/leaflet/leaflet.ie.css" /><![endif]-->
 <!-- JavaScript libraries -->
 <script type="text/javascript" src="./libs/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="./libs/underscore/underscore.js"></script>
 <script type="text/javascript" src="./libs/leaflet/leaflet.js"></script>
 <script type="text/javascript"
 	src="./libs/leaflet.utfgrid/leaflet.utfgrid.js"></script>
@@ -32,15 +33,17 @@ html,body {
 	right: 0px;
 }
 
-#info {
-	background-color: white;
-	border: 1px solid silver;
-	position: absolute;
+.panels {
 	top: 10px;
 	right: 10px;
 	width: 200px;
-	padding: 1em;
 	position: absolute;
+}
+
+.panels .panel {
+	background-color: white;
+	border: 1px solid silver;
+	padding: 1em;
 }
 
 p,h3 {
@@ -53,27 +56,39 @@ p,h3 {
 </head>
 <body>
 
-	<div id="map" data-center="[35.460669951495305, -29.8828125]"
-		data-zoom="2" data-min-zoom="1" data-max-zoom="18"
-		data-tiles-url="/tiles/project/{z}/{x}/{y}.png"
-		data-utfgrid-url="/tiles/project/{z}/{x}/{y}.grid.json?callback={cb}">
+	<div id="map" data-center="[2.330474853515625,48.86110101269274]"
+		data-zoom="10" data-min-zoom="10" data-max-zoom="18">
 		<div class="attribution">
 			Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
 			contributors
 		</div>
-	</div>
+		<div data-type="layer"
+			data-tiles-url="/tiles/layers/countries/{z}/{x}/{y}.png"></div>
+		<script type="text/template" data-type="layer" data-panel="#info"
+			data-utfgrid-url="/tiles/layers/countries/{z}/{x}/{y}.grid.json?callback={cb}">
+			<h3>
+				<span class="name"><%=ADMIN%></span> (<span class="abbrev"><%=ABBREV%></span>)
+			</h3>
+			<p>
+				Type: <span class="type"><%=TYPE%></span>
+			</p>
+			<p>
+				Post Code: <span class="postcode"><%=POSTAL%></span>
+			</p>
+		</script>
+		
+		<div data-type="layer"
+			data-tiles-url="/tiles/layers/autolib/{z}/{x}/{y}.png?abc"></div>
+		<script type="text/template" data-type="layer" data-panel="#details"
+			data-action="mouseover"
+			data-utfgrid-url="/tiles/layers/autolib/{z}/{x}/{y}.grid.json?callback={cb}">
+            <h3><span class="name"><%=label%></span></h3>
+        </script>
 
-	<div id="info" style="display: none;">
-		<h3>
-			<span class="name" data-placeholder="ADMIN"></span> (<span
-				class="abbrev" data-placeholder="ABBREV"></span>)
-		</h3>
-		<p>
-			Type: <span class="type" data-placeholder="TYPE"></span>
-		</p>
-		<p>
-			Post Code: <span class="postcode" data-placeholder="POSTAL"></span>
-		</p>
+	</div>
+	<div class="panels">
+		<div class="panel" id="info" style="display: none;"></div>
+		<div class="panel" id="details" style="display: none;"></div>
 	</div>
 </body>
 </html>

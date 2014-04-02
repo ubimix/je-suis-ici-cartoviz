@@ -3,7 +3,7 @@
     {
       "Datasource": {
         "extent": "-20037508.34 -20037508.34 20037508.34 20037508.34", 
-        "file": "layers/country-shapes-110m/ne_110m_admin_0_countries.shp", 
+        "file": "country-shapes-110m/ne_110m_admin_0_countries.shp", 
         "type" : "shape"
       }, 
       "class": "", 
