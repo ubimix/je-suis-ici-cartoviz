@@ -2,59 +2,62 @@ var _ = require('underscore');
 var Utils = require('./transform-utils');
 
 var exported = module.exports = [];
+//
+// // 01 - Musee
+// exported.push(D01_MuseumConfig());
+//
+// // 02 - Hopitaux
+// exported.push(D02_HospitalsConfig());
+//
+// // 03 - Poste (points de contact)
+// exported.push(D03_LaPosteConfig());
+//
+// // 04 - Pharmacie
+// exported.push(D04_PharmaciesConfig());
+//
+// // 05 - Arrets de bus RATP
+// // !!! Not accessible
+// // exported.push(D05_BusArretsConfig());
+//
+// // 05 - Autolib
+// exported.push(D06_AutoLibConfig());
+//
+// // 07 - Positions géographiques des stations du réseau RATP
+// exported.push(D07_StationRATP());
+//
+// // 08 - Commissariat de Police
+// exported.push(D08_Police());
+//
+// // 09 - Velib
+// exported.push(D09_Velib());
+//
+// // 10 - Monuments
+// exported.push(D10_Monuments());
+//
+// // 11 - Gare SNCF transilien
+// exported.push(D11_GaresSNCF());
+//
+// // 12 - Sanisettes
+// exported.push(D12_Sanisettes());
+//
+// // 13 - Kiosques à journaux
+// exported.push(D13_Kiosques());
+//
+// // // 15 - Marchés de quartier
+// // // !!! No coordinates
+// // //exported.push(D15_Marches());
+//
+// // 16 - Espaces verts, crèches, piscines, équipements sportifs
+// exported.push(D16_EspacesVerts());
+//
+// // 17 - Liste des sites des hotspots Paris WiFi
+// exported.push(D17_SiteWifi());
+//
+// // // 24 - Mobiliers urbains de propreté - Emplacements des colonnes à verre
+// // exported.push(D24_MobilierParisConfig());
 
-// 01 - Musee
-exported.push(D01_MuseumConfig());
-
-// 02 - Hopitaux
-exported.push(D02_HospitalsConfig());
-
-// 03 - Poste (points de contact)
-exported.push(D03_LaPosteConfig());
-
-// 04 - Pharmacie
-exported.push(D04_PharmaciesConfig());
-
-// 05 - Arrets de bus RATP
-// !!! Not accessible
-// exported.push(D05_BusArretsConfig());
-
-// 05 - Autolib
-exported.push(D06_AutoLibConfig());
-
-// 07 - Positions géographiques des stations du réseau RATP
-exported.push(D07_StationRATP());
-
-// 08 - Commissariat de Police
-exported.push(D08_Police());
-
-// 09 - Velib
-exported.push(D09_Velib());
-
-// 10 - Monuments
-exported.push(D10_Monuments());
-
-// 11 - Gare SNCF transilien
-exported.push(D11_GaresSNCF());
-
-// 12 - Sanisettes
-exported.push(D12_Sanisettes());
-
-// 13 - Kiosques à journaux
-exported.push(D13_Kiosques());
-
-// // 15 - Marchés de quartier
-// // !!! No coordinates
-// //exported.push(D15_Marches());
-
-// 16 - Espaces verts, crèches, piscines, équipements sportifs
-exported.push(D16_EspacesVerts());
-
-// 17 - Liste des sites des hotspots Paris WiFi
-exported.push(D17_SiteWifi());
-
-// // 24 - Mobiliers urbains de propreté - Emplacements des colonnes à verre
-// exported.push(D24_MobilierParisConfig());
+// 25 - La carte des hôtels classés en Île-de-France
+exported.push(D25_Hotels());
 
 // Common properties:
 // - type
@@ -329,8 +332,8 @@ function D08_Police() {
 function D09_Velib() {
     return Utils
             .newDataSet({
-                "path" : "velos_en_libre-service_en_ile-de-france.csv",
-                "url" : "http://data.iledefrance.fr/explore/dataset/velos_en_libre-service_en_ile-de-france/download?format=csv",
+                "path" : "velib_a_paris_et_communes_limitrophes.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/velib_a_paris_et_communes_limitrophes/download?format=csv",
                 transform : function(obj) {
                     return {
                         type : 'Feature',
@@ -342,7 +345,7 @@ function D09_Velib() {
                                 'name' : 'label'
                             }
                         })),
-                        geometry : this._toGeometry(obj.wgs84)
+                        geometry : this._toGeometryPoint(obj.wgs84)
                     }
                 }
             });
@@ -558,6 +561,42 @@ function D24_MobilierParisConfig() {
                             }
                         })),
                         geometry : this._toGeometry(obj.geom)
+                    }
+                }
+            });
+}
+
+/* ------------------------------------------------------------ */
+
+// 25 - La carte des hôtels classés en Île-de-France
+function D25_Hotels() {
+    var DataTypes = {
+        exclude : [ 'lat', 'lng', 'wgs84' ],
+        convert : {
+            'nom_commercial' : 'label',
+            'courriel' : 'email'
+        },
+        dataTypes : {
+            'nombre_de_chambres' : 'integer',
+            'capacite_d_accueil_personnes' : 'integer',
+            'site_internet' : 'url',
+            'telephone' : 'telephone',
+            'date_de_classement' : 'date',
+            'date_de_publication_de_l_etablissement' : 'date',
+            'courriel' : 'email'
+        }
+    };
+    return Utils
+            .newDataSet({
+                "path" : "les_hotels_classes_en_ile-de-france.csv",
+                "url" : "http://data.iledefrance.fr/explore/dataset/les_hotels_classes_en_ile-de-france/download?format=csv",
+                transform : function(obj) {
+                    return {
+                        type : 'Feature',
+                        properties : _.extend({
+                            type : 'Hotels'
+                        }, this._toProperties(obj, DataTypes)),
+                        geometry : this._toGeometryPoint(obj.wgs84)
                     }
                 }
             });

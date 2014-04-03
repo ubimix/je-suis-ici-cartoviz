@@ -6,6 +6,7 @@
             var elm = $(this);
             var tilesUrl = elm.data('tiles-url');
             if (tilesUrl) {
+                console.log(tilesUrl)
                 var attributionElm = elm.find('.attribution');
                 var attribution = attributionElm.html();
                 attributionElm.remove();

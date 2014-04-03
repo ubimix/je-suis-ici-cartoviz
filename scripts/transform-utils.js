@@ -95,6 +95,14 @@ function newDataSet(dataset) {
                     }
                     return value;
                 },
+                _toEmail : function(value) {
+                    if (isEmpty(value))
+                        return undefined;
+                    if (!value.match(/^mailto:/)) {
+                        value = 'mailto:' + value;
+                    }
+                    return value;
+                },
                 _toBoolean : function(value) {
                     if (isEmpty(value))
                         return undefined;

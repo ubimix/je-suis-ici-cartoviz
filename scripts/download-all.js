@@ -8,18 +8,7 @@ var PostGisUtils = require('./postgis-utils');
 
 var dataFolder = '../data';
 var datasets = require('./datasets.js')
-
-// * Drop tables
-// * Create tables
-// * Fill the tables with data
-// * Index tables
-// * Create views (?) for windshaft
-
-function writeObjectToDb(connection, obj) {
-    // * Transform to SQL
-    // * Execute the query
-    // * Return a promise
-}
+var rebuildDb = false;
 
 function Listener(options) {
     this.initialize(options);
@@ -108,22 +97,38 @@ var DbWriteListener = Listener.extend({
     },
     onBegin : function() {
         var that = this;
-        return PostGisUtils.newConnection(that.options).then(function(client) {
-            that.client = client;
-            var initSql = PostGisUtils.generateTableCreationSQL(that.options);
-            return PostGisUtils.runQuery(that.client, initSql);
-        });
+        return PostGisUtils.newConnection(that.options).then(
+                function(client) {
+                    that.client = client;
+                    var promise;
+                    if (that.options.rebuildDb) {
+                        var initSql = PostGisUtils
+                                .generateTableCreationSQL(that.options);
+                        promise = PostGisUtils.runQuery(that.client, initSql);
+                    } else {
+                        promise = Q();
+                    }
+                    return promise.then(function() {
+                        return client;
+                    });
+                });
     },
     onEnd : function() {
         var that = this;
         return Q().then(
-                function() {
-                    var indexesSql = PostGisUtils
-                            .generateTableIndexesSQL(that.options);
-                    var viewsSql = PostGisUtils
-                            .generateTableViewsSQL(that.options);
-                    return PostGisUtils.runQuery(that.client, indexesSql,
-                            viewsSql);
+                function(result) {
+                    var promise = Q();
+                    if (that.options.rebuildDb) {
+                        var indexesSql = PostGisUtils
+                                .generateTableIndexesSQL(that.options);
+                        var viewsSql = PostGisUtils
+                                .generateTableViewsSQL(that.options);
+                        promise = PostGisUtils.runQuery(that.client,
+                                indexesSql, viewsSql);
+                    }
+                    return promise.then(function() {
+                        return result;
+                    })
                 }) // 
         .fin(function() {
             if (that.client) {
@@ -133,6 +138,8 @@ var DbWriteListener = Listener.extend({
         });
     },
     onDatasetEntity : function(dataset, entity) {
+        this._counter = this._counter || 0;
+        this._counter++;
         var obj = this._transformToGeoJson(dataset, entity);
         var sql = PostGisUtils.toPostGisSql(obj, this.options);
         return PostGisUtils.runQuery(this.client, sql);
@@ -187,9 +194,12 @@ function handleAll(dataFolder, dataSets, listener) {
                 return listener.onBeginDataset(dataset).then(function() {
                     var fileName = Path.join(dataFolder, dataset.path);
                     var csvOptions = dataset.csvOptions || {};
+                    var list = [];
                     return Utils.readCsv(fileName, function(obj) {
-                        return listener.onDatasetEntity(dataset, obj);
-                    }, csvOptions);
+                        list.push(listener.onDatasetEntity(dataset, obj));
+                    }, csvOptions).then(function() {
+                        return Q.all(list);
+                    });
                 }).fin(function() {
                     return listener.onEndDataset(dataset);
                 })
@@ -205,7 +215,8 @@ var listener = new WriteListener({
 });
 var listener = new DbWriteListener({
     dbname : 'je_suis_ici',
-    table : 'objects'
+    table : 'objects',
+    rebuildDb : rebuildDb
 });
 
 listener = new LogListener({

@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 function opacity(value) {
     return Math.max(0, Math.min(value, 1));
 }
@@ -7,6 +9,21 @@ function width(value) {
     return value;
 }
 module.exports = {
+    extendStyle : function() {
+        var result = {};
+        _.each(arguments, function(style) {
+            _.each(style, function(value, key) {
+                var oldValue = result[key];
+                if (_.isObject(oldValue) && _.isObject(value)) {
+                    _.extend(oldValue, value);
+                } else {
+                    result[key] = value;
+                }
+            })
+        })
+        return result;
+    },
+
     getMarkerZoomLevels : function(options, params) {
         params = params || {};
         var maxZoom = params.maxZoom || 18;
