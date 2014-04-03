@@ -245,7 +245,7 @@ function isEmpty(str) {
 function downloadAll(baseDir, datasets, force) {
     return Q.all(_.map(datasets, function(dataset) {
         var url = dataset.url;
-        if (!url) {
+        if (!url || url == '') {
             return Q(false);
         }
         var fileName = Path.join(baseDir, dataset.path);
