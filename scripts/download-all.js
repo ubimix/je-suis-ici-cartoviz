@@ -80,6 +80,11 @@ var WriteListener = Listener.extend({
         var info = this.index[dataset.path];
         var obj = this._transformToGeoJson(dataset, entity);
         var str = JSON.stringify(obj, null, 2);
+        var info = this.index[dataset.path];
+        if (info.counter > 0) {
+            str = ',\n' + str;
+        }
+        info.counter++;
         return Q.ninvoke(info.output, 'write', str, 'UTF-8');
     },
     _setExtension : function(fileName, newExt) {
@@ -213,11 +218,11 @@ function handleAll(dataFolder, dataSets, listener) {
 var listener = new WriteListener({
     dataFolder : dataFolder
 });
-var listener = new DbWriteListener({
-    dbname : 'je_suis_ici',
-    table : 'objects',
-    rebuildDb : rebuildDb
-});
+//var listener = new DbWriteListener({
+//    dbname : 'je_suis_ici',
+//    table : 'objects',
+//    rebuildDb : rebuildDb
+//});
 
 listener = new LogListener({
     listener : listener
