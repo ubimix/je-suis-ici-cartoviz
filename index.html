@@ -62,29 +62,39 @@ p,h3 {
 			Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
 			contributors
 		</div>
+
 		<div data-type="layer"
-			data-tiles-url="/tiles/layers/countries/{z}/{x}/{y}.png"></div>
-		<script type="text/template" data-type="layer" data-panel="#info"
-			data-utfgrid-url="/tiles/layers/countries/{z}/{x}/{y}.grid.json?callback={cb}">
-			<h3>
-				<span class="name"><%=ADMIN%></span> (<span class="abbrev"><%=ABBREV%></span>)
-			</h3>
-			<p>
-				Type: <span class="type"><%=TYPE%></span>
-			</p>
-			<p>
-				Post Code: <span class="postcode"><%=POSTAL%></span>
-			</p>
-		</script>
-		
+			data-tiles-url="/tiles/layers/osm-bright/{z}/{x}/{y}.png"></div>
+
+		<!-- Vivre -->
 		<div data-type="layer"
-			data-tiles-url="/tiles/layers/autolib/{z}/{x}/{y}.png?abc"></div>
+			data-tiles-url="/tiles/layers/vivre/{z}/{x}/{y}.png"></div>
 		<script type="text/template" data-type="layer" data-panel="#details"
 			data-action="mouseover"
-			data-utfgrid-url="/tiles/layers/autolib/{z}/{x}/{y}.grid.json?callback={cb}">
-            <h3><span class="name"><%=label%></span></h3>
+			data-utfgrid-url="/tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}">
+            <h3><span class="name"><%=properties.label%></span></h3>
+            <div><%=type%></div>
         </script>
 
+		<!-- Se deplacer -->
+		<div data-type="layer"
+			data-tiles-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.png"></div>
+		<script type="text/template" data-type="layer" data-panel="#details"
+			data-action="mouseover"
+			data-utfgrid-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}">
+            <h3><span class="name"><%=properties.label%></span></h3>
+            <div><%=type%></div>
+        </script>
+
+		<!-- Visiter -->
+		<div data-type="layer"
+			data-tiles-url="/tiles/layers/visiter/{z}/{x}/{y}.png"></div>
+		<script type="text/template" data-type="layer" data-panel="#details"
+			data-action="mouseover"
+			data-utfgrid-url="/tiles/layers/visiter/{z}/{x}/{y}.grid.json?callback={cb}">
+            <h3><span class="name"><%=properties.label%></span></h3>
+            <div><%=type%></div>
+        </script>
 	</div>
 	<div class="panels">
 		<div class="panel" id="info" style="display: none;"></div>

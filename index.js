@@ -24,7 +24,15 @@
                 var action = elm.data('action') || 'mouseover';
                 utfGrid.on(action, function(ev) {
                     var panel = $(panelSelector);
-                    var html = template(ev.data);
+                    var data = ev.data;
+                    if (_.isString(data.properties)){
+                        data.properties = JSON.parse(data.properties);
+                    }
+                    if (_.isString(data.geometry)){
+                        data.geometry = JSON.parse(data.geometry);
+                    }
+                    console.log(data);
+                    var html = template(data);
                     panel.html(html);
                     panel.show();
                 });
