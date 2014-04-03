@@ -19,7 +19,7 @@
     "dependencies" : {
         "underscore" : "*",
         "express" : "*",
-        "tilepin" : "git://github.com/ubimix/tilepin.git"
+        "geocoder" : "*"
     },
     "scripts" : {
         "start" : "node ./node_modules/tilepin/tilepin-server.js"
