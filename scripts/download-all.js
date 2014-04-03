@@ -77,15 +77,18 @@ var WriteListener = Listener.extend({
         return Q.ninvoke(info.output, 'end', ']', 'UTF-8');
     },
     onDatasetEntity : function(dataset, entity) {
-        var info = this.index[dataset.path];
-        var obj = this._transformToGeoJson(dataset, entity);
-        var str = JSON.stringify(obj, null, 2);
-        var info = this.index[dataset.path];
-        if (info.counter > 0) {
-            str = ',\n' + str;
-        }
-        info.counter++;
-        return Q.ninvoke(info.output, 'write', str, 'UTF-8');
+        var that = this;
+        return Q().then(function() {
+            return that._transformToGeoJson(dataset, entity);
+        }).then(function(obj) {
+            var str = JSON.stringify(obj, null, 2);
+            var info = that.index[dataset.path];
+            if (info.counter > 0) {
+                str = ',\n' + str;
+            }
+            info.counter++;
+            return Q.ninvoke(info.output, 'write', str, 'UTF-8');
+        });
     },
     _setExtension : function(fileName, newExt) {
         return Path.join(Path.dirname(fileName), Path.basename(fileName, Path
@@ -145,9 +148,13 @@ var DbWriteListener = Listener.extend({
     onDatasetEntity : function(dataset, entity) {
         this._counter = this._counter || 0;
         this._counter++;
-        var obj = this._transformToGeoJson(dataset, entity);
-        var sql = PostGisUtils.toPostGisSql(obj, this.options);
-        return PostGisUtils.runQuery(this.client, sql);
+        var that = this;
+        return Q().then(function() {
+            return that._transformToGeoJson(dataset, entity);
+        }).then(function(obj) {
+            var sql = PostGisUtils.toPostGisSql(obj, that.options);
+            return PostGisUtils.runQuery(that.client, sql);
+        })
     },
 })
 
@@ -218,11 +225,11 @@ function handleAll(dataFolder, dataSets, listener) {
 var listener = new WriteListener({
     dataFolder : dataFolder
 });
-//var listener = new DbWriteListener({
-//    dbname : 'je_suis_ici',
-//    table : 'objects',
-//    rebuildDb : rebuildDb
-//});
+// var listener = new DbWriteListener({
+// dbname : 'je_suis_ici',
+// table : 'objects',
+// rebuildDb : rebuildDb
+// });
 
 listener = new LogListener({
     listener : listener
