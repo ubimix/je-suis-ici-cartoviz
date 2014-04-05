@@ -1,6 +1,17 @@
 (function(context) {
     $(function() {
         var mapElement = $('#map');
+        var center = mapElement.data('center') || [ 0, 0 ];
+        center = [ center[1], center[0] ];
+        var zoom = mapElement.data('zoom');
+        var minZoom = mapElement.data('min-zoom') || 2;
+        var maxZoom = mapElement.data('max-zoom') || 18;
+
+        console.log('center:', center);
+        console.log('minZoom:', minZoom);
+        console.log('maxZoom:', maxZoom);
+        console.log('zoom:', zoom);
+
         var layers = [];
         mapElement.find('[data-type="layer"]').each(function() {
             var elm = $(this);
@@ -26,10 +37,10 @@
                 utfGrid.on(action, function(ev) {
                     var panel = $(panelSelector);
                     var data = ev.data;
-                    if (_.isString(data.properties)){
+                    if (_.isString(data.properties)) {
                         data.properties = JSON.parse(data.properties);
                     }
-                    if (_.isString(data.geometry)){
+                    if (_.isString(data.geometry)) {
                         data.geometry = JSON.parse(data.geometry);
                     }
                     console.log(data);
@@ -41,16 +52,6 @@
             }
         })
         mapElement.html('');
-        var center = mapElement.data('center') || [ 0, 0 ];
-        center = [ center[1], center[0] ];
-        var zoom = mapElement.data('zoom');
-        var minZoom = mapElement.data('min-zoom') || 2;
-        var maxZoom = mapElement.data('max-zoom') || 18;
-
-        console.log('center:', center);
-        console.log('minZoom:', minZoom);
-        console.log('maxZoom:', maxZoom);
-        console.log('zoom:', zoom);
 
         var map = L.map(mapElement[0]).setView(center, zoom);
         _.each(layers, function(layer) {
