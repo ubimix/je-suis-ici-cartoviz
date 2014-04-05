@@ -36,18 +36,21 @@ Map { font-directory: url(./fonts); }
 /* ================================================================== */
 /* LANDUSE & LANDCOVER COLORS
 /* ================================================================== */
+@green_zone: #D9E585;
 
-@land:              #FCFBE7;
-@water:             #C4DFF6;
-@grass:             #E6F2C1;
+@land:              #EAEAEA; /* #FCFBE7; */
+@water:             #9EDAEF; /* #C4DFF6; */
+@grass:             lighten(@green_zone,5%); /* #E6F2C1; */
 @beach:             #FFEEC7;
-@park:              #DAF2C1;
-@cemetery:          #D6DED2;
-@wooded:            #C3D9AD;
+@park:              darken(@green_zone,5%); /* #DAF2C1; */
+@cemetery:          #D9E585; /* #D6DED2; */
+@wooded:            @green_zone; /* #C3D9AD; */
 @agriculture:       #F2E8B6;
 
-@building:          #E4E0E0;
-@hospital:          rgb(229,198,195);
+@lighten:           5%;
+@building:          #CCBDBE; /* #E4E0E0; */
+@building_light:    lighten(@building,@lighten); 
+@hospital:          #A99697; /* rgb(229,198,195); */
 @school:            #FFF5CC;
 @sports:            #B8E6B8;
 
@@ -68,6 +71,43 @@ Map { font-directory: url(./fonts); }
  * - fill: for higher zoomlevels, this color is for the road's
  *         inner fill (inline).
  */
+
+@road:              #eee;
+@motorway_line:     @road; // #E65C5C;
+@motorway_fill:     lighten(@motorway_line,10%);
+@motorway_case:     @motorway_line * 0.9;
+
+@trunk_line:        @road; // #E68A5C;
+@trunk_fill:        lighten(@trunk_line,10%);
+@trunk_case:        @trunk_line * 0.9;
+
+@primary_line:      @road; // #FFC859;
+@primary_fill:      lighten(@primary_line,10%);
+@primary_case:      @primary_line * 0.9;
+
+@secondary_line:    @road; // #FFE873;
+@secondary_fill:    lighten(@secondary_line,10%);
+@secondary_case:    @secondary_line * 0.9;
+
+@standard_line:     @land * 0.85;
+@standard_fill:     @road; // #fff;
+@standard_case:     @land * 0.9;
+
+@pedestrian_line:   @standard_line;
+@pedestrian_fill:   @road; // #FAFAF5;
+@pedestrian_case:   @land;
+
+@cycle_line:        @standard_line;
+@cycle_fill:        @road; // #FAFAF5;
+@cycle_case:        @land;
+
+@rail_line:         #999;
+@rail_fill:         #fff;
+@rail_case:         @land;
+
+@aeroway:           #ddd;
+
+/*
 
 @motorway_line:     #E65C5C;
 @motorway_fill:     lighten(@motorway_line,10%);
@@ -102,6 +142,8 @@ Map { font-directory: url(./fonts); }
 @rail_case:         @land;
 
 @aeroway:           #ddd;
+
+*/
 
 /* ================================================================== */
 /* BOUNDARY COLORS
