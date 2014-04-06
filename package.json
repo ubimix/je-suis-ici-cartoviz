@@ -8,10 +8,6 @@
     "licenses" : [ {
         "type" : "BSD"
     } ],
-    "repository" : {
-        "type" : "git",
-        "url" : "http://github.com/tilepin/tilepin.git"
-    },
     "contributors" : [ {
         "name" : "Mikhail Kotelnikov",
         "email" : "mikhail.kotelnikov"
@@ -19,7 +15,7 @@
     "dependencies" : {
         "underscore" : "*",
         "express" : "*",
-        "geocoder" : "*"
+        "tilepin" : "git://github.com/ubimix/tilepin.git"
     },
     "scripts" : {
         "start" : "node ./node_modules/tilepin/tilepin-server.js"
