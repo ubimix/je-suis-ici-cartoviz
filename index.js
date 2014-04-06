@@ -1,81 +1,67 @@
 (function(context) {
-    function appendRandomParam(url) {
-        var ch = (url.indexOf('?') < 0) ? '?' : '&';
-        url += ch;
-        url += 'x=' + Math.random() * 1000;
-        url += '-' + new Date().getTime();
-        return url;
-    }
     $(function() {
-        var mapElement = $('#map');
-        var center = mapElement.data('center') || [ 0, 0 ];
-        center = [ center[1], center[0] ];
-        var zoom = mapElement.data('zoom');
-        var minZoom = mapElement.data('min-zoom') || 2;
-        var maxZoom = mapElement.data('max-zoom') || 18;
-        var forceReload = mapElement.data('force-reload') || false;
-
-        console.log('center:', center);
-        console.log('minZoom:', minZoom);
-        console.log('maxZoom:', maxZoom);
-        console.log('zoom:', zoom);
-
-        var layers = [];
-        mapElement.find('[data-type="layer"]').each(function() {
-            var elm = $(this);
-            var tilesUrl = elm.data('tiles-url');
-            if (tilesUrl) {
-                if (forceReload) {
-                    tilesUrl = appendRandomParam(tilesUrl);
-                }
-                var attributionElm = elm.find('.attribution');
-                var attribution = attributionElm.html();
-                attributionElm.remove();
-                var tilesLayer = L.tileLayer(tilesUrl, {
-                    attribution : attribution,
-                    minZoom : minZoom,
-                    maxZoom : maxZoom,
-                });
-                layers.push(tilesLayer);
-            }
-            var utfgridUrl = elm.data('utfgrid-url');
-            if (utfgridUrl) {
-                if (forceReload) {
-                    utfgridUrl = appendRandomParam(utfgridUrl);
-                }
-                var utfGrid = new L.UtfGrid(utfgridUrl);
-                var template = _.template(elm.text());
-                var panelSelector = elm.data('panel') || '#info';
-                var action = elm.data('action') || 'mouseover';
-                utfGrid.on(action, function(ev) {
-                    var panel = $(panelSelector);
-                    var data = ev.data;
-                    if (_.isString(data.properties)) {
-                        data.properties = JSON.parse(data.properties);
-                    }
-                    if (_.isString(data.geometry)) {
-                        data.geometry = JSON.parse(data.geometry);
-                    }
-                    console.log(data);
-                    var html = template(data);
-                    panel.html(html);
-                    panel.show();
-                });
-                layers.push(utfGrid);
-            }
-        })
-        mapElement.html('');
-
-        var map = L.map(mapElement[0]).setView(center, zoom);
-        _.each(layers, function(layer) {
-            map.addLayer(layer);
-        })
-
-        map.on('click', function(e) {
-            console.log(map.getZoom() + ' [' + e.latlng.lng + ','
-                    + e.latlng.lat + ']');
-        })
-
+        initSlimScroll();
+        initTabs();
+        initWindowResize();
     });
+
+    function initSlimScroll() {
+        $('.slimscroll-sidebar').slimScroll({});
+    }
+
+    function initTabs() {
+        // Sidebar
+        var sectionSwitch = {
+            closeOthers : function($trigger, $target) {
+                $('.left-zone .tab').not($trigger).removeClass('open')
+                $('ul.categories').not($target).removeClass('open')
+            },
+
+            init : function($trigger) {
+                $trigger.on('click', function() {
+
+                    var $trigger = $(this);
+                    var id = $(this).data('trigger-section');
+                    var $target = $('ul.categories[data-section=' + id + ']');
+
+                    $trigger.toggleClass('open');
+                    $target.toggleClass('open');
+
+                    sectionSwitch.closeOthers($trigger, $target);
+                })
+            }
+        }
+        $('[data-trigger-section]').each(function() {
+            sectionSwitch.init($(this));
+        });
+
+    }
+
+    function initWindowResize() {
+        // Functions
+        function sidebarheight() {
+            var $sidebar = $('.categories');
+            var $bottom = $('.bottom-zone:visible');
+            var $right = $('.left-zone');
+            var $map = $('.map');
+
+            var sidebarHeight = $sidebar.height();
+            var mapHeight = $map.height();
+            var bottomHeight = $bottom.height();
+            var paddingTop = parseInt($right.css('padding-top'), 10);
+            var paddingBottom = parseInt($right.css('padding-bottom'), 10);
+
+            $sidebar.css('max-height', mapHeight - bottomHeight - paddingTop
+                    - paddingBottom);
+        }
+        // Events
+        $(window).on('throttledresize', function() {
+
+            sidebarheight();
+
+            $('.slimscroll-sidebar').slimScroll({});
+        });
+        sidebarheight();
+    }
 
 })(this);

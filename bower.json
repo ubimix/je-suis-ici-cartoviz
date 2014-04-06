@@ -1,0 +1,16 @@
+{
+    "name" : "je-suis-ici",
+    "version" : "0.0.1",
+    "dependencies" : {
+        "bootstrap" : "3.1.1",
+        "font-awesome" : "4.0.3",
+        "jquery" : "1.9.1",
+        "underscore" : "1.6.0",
+        "q" : "1.0.0",
+        "mosaic-ui" : "git://github.com/ubimix/mosaic-ui.git"
+    },
+    "devDependencies" : {
+        "mocha" : "*",
+        "expect" : "*"
+    }
+}
