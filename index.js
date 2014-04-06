@@ -1,4 +1,11 @@
 (function(context) {
+    function appendRandomParam(url) {
+        var ch = (url.indexOf('?') < 0) ? '?' : '&';
+        url += ch;
+        url += 'x=' + Math.random() * 1000;
+        url += '-' + new Date().getTime();
+        return url;
+    }
     $(function() {
         var mapElement = $('#map');
         var center = mapElement.data('center') || [ 0, 0 ];
@@ -6,6 +13,7 @@
         var zoom = mapElement.data('zoom');
         var minZoom = mapElement.data('min-zoom') || 2;
         var maxZoom = mapElement.data('max-zoom') || 18;
+        var forceReload = mapElement.data('force-reload') || false;
 
         console.log('center:', center);
         console.log('minZoom:', minZoom);
@@ -17,7 +25,9 @@
             var elm = $(this);
             var tilesUrl = elm.data('tiles-url');
             if (tilesUrl) {
-                console.log(tilesUrl)
+                if (forceReload) {
+                    tilesUrl = appendRandomParam(tilesUrl);
+                }
                 var attributionElm = elm.find('.attribution');
                 var attribution = attributionElm.html();
                 attributionElm.remove();
@@ -30,6 +40,9 @@
             }
             var utfgridUrl = elm.data('utfgrid-url');
             if (utfgridUrl) {
+                if (forceReload) {
+                    utfgridUrl = appendRandomParam(utfgridUrl);
+                }
                 var utfGrid = new L.UtfGrid(utfgridUrl);
                 var template = _.template(elm.text());
                 var panelSelector = elm.data('panel') || '#info';
