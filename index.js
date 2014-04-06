@@ -1,67 +1,183 @@
 (function(context) {
+    var mapInfo;
+
     $(function() {
-        initSlimScroll();
-        initTabs();
-        initWindowResize();
+        mapInfo = initMap();
+        _.each(mapInfo.layers, function(info, id) {
+            toggleLayer(id);
+        })
+        initLayerSwitchers();
     });
 
-    function initSlimScroll() {
-        $('.slimscroll-sidebar').slimScroll({});
+    function initLayerSwitchers() {
+        $('[data-map-layer-selector]').each(function() {
+            var el = $(this);
+            var id = el.data('map-layer-selector');
+            if (!id)
+                return;
+            el.click(function(e) {
+                toggleLayer(id);
+                e.preventDefault();
+                e.stopPropagation();
+            })
+        })
     }
 
-    function initTabs() {
-        // Sidebar
-        var sectionSwitch = {
-            closeOthers : function($trigger, $target) {
-                $('.left-zone .tab').not($trigger).removeClass('open')
-                $('ul.categories').not($target).removeClass('open')
-            },
-
-            init : function($trigger) {
-                $trigger.on('click', function() {
-
-                    var $trigger = $(this);
-                    var id = $(this).data('trigger-section');
-                    var $target = $('ul.categories[data-section=' + id + ']');
-
-                    $trigger.toggleClass('open');
-                    $target.toggleClass('open');
-
-                    sectionSwitch.closeOthers($trigger, $target);
-                })
+    function toggleLayer(id) {
+        var info = mapInfo.layers[id];
+        if (!info)
+            return;
+        info.visible = !info.visible;
+        _.each([ info.tiles, info.grid ], function(layer) {
+            if (!layer)
+                return;
+            if (info.visible) {
+                mapInfo.map.addLayer(layer);
+            } else {
+                mapInfo.map.removeLayer(layer);
             }
-        }
-        $('[data-trigger-section]').each(function() {
-            sectionSwitch.init($(this));
-        });
-
+        })
     }
 
-    function initWindowResize() {
-        // Functions
-        function sidebarheight() {
-            var $sidebar = $('.categories');
-            var $bottom = $('.bottom-zone:visible');
-            var $right = $('.left-zone');
-            var $map = $('.map');
-
-            var sidebarHeight = $sidebar.height();
-            var mapHeight = $map.height();
-            var bottomHeight = $bottom.height();
-            var paddingTop = parseInt($right.css('padding-top'), 10);
-            var paddingBottom = parseInt($right.css('padding-bottom'), 10);
-
-            $sidebar.css('max-height', mapHeight - bottomHeight - paddingTop
-                    - paddingBottom);
+    var marker;
+    var markerLatLng;
+    function showMarker(data) {
+        var coords = data.geometry.coordinates;
+        markerLatLng = [ coords[1], coords[0] ];
+        refreshMarker();
+    }
+    function hideMarker() {
+        if (marker) {
+            mapInfo.map.removeLayer(marker);
+            marker = null;
         }
-        // Events
-        $(window).on('throttledresize', function() {
-
-            sidebarheight();
-
-            $('.slimscroll-sidebar').slimScroll({});
+    }
+    function refreshMarker() {
+        hideMarker();
+        if (!markerLatLng)
+            return;
+        var zoom = mapInfo.map.getZoom();
+        var baseRadius = 10;
+        var baseZoom = 16;
+        var baseWidth = 1;
+        var radius = Math.max(5, baseRadius * Math.pow(2, zoom - baseZoom));
+        var width = Math.max(1, baseWidth * Math.pow(2, zoom - baseZoom));
+        marker = L.circleMarker(markerLatLng, {
+            color : 'red',
+            opacity : 0.8,
+            weight : width,
+            radius : radius,
+            fillColor : 'white',
+            fillOpacity : 0.3
         });
-        sidebarheight();
+        mapInfo.map.addLayer(marker);
+    }
+    function initMap() {
+        function appendRandomParam(url) {
+            var ch = (url.indexOf('?') < 0) ? '?' : '&';
+            url += ch;
+            url += 'x=' + Math.random() * 1000;
+            url += '-' + new Date().getTime();
+            return url;
+        }
+        function buildContent(elm, data) {
+            var content = $('<div></div>').append(elm);
+            content.find('[data-property]').each(
+                    function() {
+                        var el = $(this);
+                        var f = eval('(function(data){return '
+                                + el.data('property') + ';})');
+                        var value = '';
+                        if (_.isFunction(f)) {
+                            value = f.call(data, data);
+                        }
+                        el.text(value);
+                    })
+            return content;
+        }
+        var mapElement = $('#map');
+        var center = mapElement.data('center') || [ 0, 0 ];
+        center = [ center[1], center[0] ];
+        var zoom = mapElement.data('zoom');
+        var minZoom = mapElement.data('min-zoom') || 2;
+        var maxZoom = mapElement.data('max-zoom') || 18;
+        var forceReload = mapElement.data('force-reload') || false;
+
+        var layers = {};
+        var result = {
+            layers : layers
+        };
+        var zIndex = 0;
+        mapElement.find('[data-map-layer]').each(function() {
+            var elm = $(this);
+            var id = elm.data('map-layer');
+            zIndex++;
+            var layerInfo = layers[id] = {
+                visible : false
+            };
+            var tilesUrl = elm.data('tiles-url');
+            if (tilesUrl) {
+                if (forceReload) {
+                    tilesUrl = appendRandomParam(tilesUrl);
+                }
+                var attributionElm = elm.find('.attribution');
+                var attribution = attributionElm.html();
+                attributionElm.remove();
+                var tilesLayer = L.tileLayer(tilesUrl, {
+                    attribution : attribution,
+                    minZoom : minZoom,
+                    maxZoom : maxZoom,
+                    zIndex : zIndex
+                });
+                layerInfo.tiles = tilesLayer;
+            }
+            var utfgridUrl = elm.data('utfgrid-url');
+            if (utfgridUrl) {
+                if (forceReload) {
+                    utfgridUrl = appendRandomParam(utfgridUrl);
+                }
+                var gridLayer = new L.UtfGrid(utfgridUrl, {
+                    zIndex : zIndex + 1000
+                });
+                var html = elm.html();
+                var panelSelector = elm.data('panel') || '#info';
+                var action = elm.data('action') || 'mouseover';
+                gridLayer.on(action, function(ev) {
+                    var panel = $(panelSelector);
+                    var data = ev.data;
+                    if (_.isString(data.properties)) {
+                        data.properties = JSON.parse(data.properties);
+                    }
+                    if (_.isString(data.geometry)) {
+                        data.geometry = JSON.parse(data.geometry);
+                    }
+                    var content = buildContent(elm, data);
+                    panel.html(content);
+                    panel.removeClass('hidden');
+                    showMarker(data);
+                });
+                layerInfo.grid = gridLayer;
+            }
+        })
+        mapElement.html('');
+
+        var map = result.map = L.map(mapElement[0], {
+            zoomControl : false
+        });
+        map.addControl(L.control.zoom({
+            position : 'topright'
+        }));
+        map.setView(center, zoom);
+
+        map.on('click', function(e) {
+            console.log(map.getZoom() + ' [' + e.latlng.lng + ','
+                    + e.latlng.lat + ']');
+        })
+
+        map.on('zoomend', function() {
+            refreshMarker();
+        });
+        return result;
     }
 
 })(this);
