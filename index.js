@@ -189,6 +189,9 @@
                     var data = ev.data;
                     if (_.isString(data.properties)) {
                         data.properties = JSON.parse(data.properties);
+                        if (!data.properties.type) {
+                            data.properties.type = data.type;
+                        }
                     }
                     if (_.isString(data.geometry)) {
                         data.geometry = JSON.parse(data.geometry);

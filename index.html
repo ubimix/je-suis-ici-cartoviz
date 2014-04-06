@@ -51,6 +51,19 @@ html,body {
 	bottom: 0px;
 }
 
+address {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.photo-wrapper img {
+    max-height: 200px; 
+	border: 1px solid silver;
+	-webkit-box-shadow: 2px 2px 11px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow: 2px 2px 11px 0px rgba(50, 50, 50, 0.75);
+	box-shadow: 2px 2px 11px 0px rgba(50, 50, 50, 0.75);
+}
+
 .panels .panel {
 	margin-bottom: 3px;
 }
@@ -70,6 +83,10 @@ html,body {
 
 .category-icon {
 	width: 1.5em;
+}
+
+.field-label {
+	color: gray;
 }
 
 p,h3 {
@@ -96,15 +113,12 @@ p,h3 {
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="#" data-map-layer-selector="vivre"><img
-							src="layers/svg/icones-pastille/vivre.svg" class="category-icon" />
-							Vivre</a></li>
-					<li><a href="#" data-map-layer-selector="sedeplacer"><img
-							src="layers/svg/icones-pastille/sedeplacer.svg"
-							class="category-icon" /> Se deplacer</a></li>
-					<li><a href="#" data-map-layer-selector="visiter"><img
-							src="layers/svg/icones-pastille/visiter.svg"
-							class="category-icon" /> Visiter</a></li>
+					<li><a href="#" data-map-layer-selector="vivre"> Vivre</a></li>
+					<li><a href="#" data-map-layer-selector="sedeplacer"> Se
+							deplacer</a></li>
+					<!-- <li><a href="#" data-map-layer-selector="visiter"> Visiter</a></li> -->
+					<li><a href="#" data-map-layer-selector="monuments">
+							Visiter</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -123,21 +137,25 @@ p,h3 {
 	<div id="map" data-center="[2.343859076499939,48.864545373142235]"
 		data-zoom="17" data-min-zoom="10" data-max-zoom="18"
 		data-force-reload="true">
-		<div class="attribution">
-			Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
-			contributors
-		</div>
 
 		<div data-map-layer="background"
-			data-tiles-url="/tiles/layers/background/{z}/{x}/{y}.png"></div>
+			data-tiles-url="tiles/layers/background/{z}/{x}/{y}.png">
+			<div class="attribution">
+				Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
+				contributors
+			</div>
+		</div>
 		<!--             <div data-map-layer="background"
                 data-tiles-url="http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png"></div>
  -->
 		<!-- Vivre -->
 		<div data-map-layer="vivre"
-			data-tiles-url="/tiles/layers/vivre/{z}/{x}/{y}.png"
-			data-utfgrid-url="/tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-tiles-url="tiles/layers/vivre/{z}/{x}/{y}.png"
+			data-utfgrid-url="tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-panel="#details" data-action="mouseover">
+			<div class="attribution">
+				&copy; <a href="http://openstreetmap.org">DataGouv</a>
+			</div>
 			<div data-template="default">
 				<div class="panel panel-default">
 					<div class="panel-heading" data-property="data.properties.label"></div>
@@ -170,8 +188,8 @@ p,h3 {
 
 		<!-- Se deplacer -->
 		<div data-map-layer="sedeplacer"
-			data-tiles-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.png"
-			data-utfgrid-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-tiles-url="tiles/layers/sedeplacer/{z}/{x}/{y}.png"
+			data-utfgrid-url="tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-panel="#details" data-action="mouseover">
 			<div data-template="default">
 				<div class="panel panel-default">
@@ -196,9 +214,10 @@ p,h3 {
 		</div>
 
 		<!-- Visiter -->
+		<!-- 
 		<div data-map-layer="visiter"
-			data-utfgrid-url="/tiles/layers/visiter/{z}/{x}/{y}.grid.json?callback={cb}"
-			data-tiles-url="/tiles/layers/visiter/{z}/{x}/{y}.png"
+			data-utfgrid-url="tiles/layers/visiter/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-tiles-url="tiles/layers/visiter/{z}/{x}/{y}.png"
 			data-panel="#details" data-action="mouseover">
 			<div data-template="default">
 				<div class="panel panel-default">
@@ -208,6 +227,107 @@ p,h3 {
 					</div>
 				</div>
 			</div>
+		</div>
+ -->
+		<!-- Monuments -->
+		<div data-map-layer="monuments"
+			data-utfgrid-url="tiles/layers/monuments/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-tiles-url="tiles/layers/monuments/{z}/{x}/{y}.png"
+			data-panel="#details" data-action="mouseover">
+			<div data-template="default">
+				<div class="panel panel-default">
+					<div class="panel-heading" data-property="data.properties.title"></div>
+					<div class="panel-body">
+						<div data-property="data.properties.wikipedia"></div>
+					</div>
+				</div>
+			</div>
+			<script type="text/template" data-template="monument">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/musee-monuments.svg" class="category-icon" /> <%-data.properties.title%></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <% if (data.properties.addr){ var props=data.properties; %>
+                                <address>
+                                    <%-props.addr.address%>  <%-props.addr.city%> <%-props.region%>
+                                    <%if (props.addr.location){%>
+                                    <div><%-props.addr.location.join(', ')%></div>
+                                    <%}%> 
+                                </address>
+                                <%}%>
+                                <% if (data.properties.description){%>
+                                <p><%-data.properties.description%></p>
+                                <%}%>
+
+                                <% if (data.properties.website){%><p>web : <a href="http://<%=data.properties.website%>" target="_blank"><%=data.properties.website%> <i class="fa fa-sign-out"></i></a></p><%}%>
+                                <% if (data.properties.wikipedia){%>
+                                <p><span class="field-label">Wikipedia :</span> <a href="<%=data.properties.wikipedia%>" target="_blank"><%=data.properties.wikipedia%>&nbsp;<i class="fa fa-sign-out"></i></a></p>
+                                <%}%>
+                                <% if (data.properties.merimeeId){%>
+                                <p><span class="field-label">ID Mérimée :</span> <a href="http://www.culture.gouv.fr/public/mistral/merimee_fr?ACTION=CHERCHER&FIELD_98=REF&VALUE_98=<%=data.properties.merimeeId%>" target="_blank"><%=data.properties.merimeeId%> <i class="fa fa-sign-out"></i></a></p>
+                                <%}%>
+                            </div>
+
+                            <div class="col-sm-6 col-md-6">
+                                <% if (data.properties.illustration&&data.properties.illustration.src&&data.properties.illustration.src!=''){%>
+                                <div class="photo-wrapper">
+                                    <img src="<%-data.properties.illustration.src%>" />
+                                </div>
+                                <%}%>
+                            </div>
+
+                        </div>
+                    </div>
+                 </div>
+            </script>
+
+			<script type="text/template" data-template="museum">
+            <div class="panel panel-default">
+                <div class="panel-heading"><img src="layers/svg/icones-pastille/musee-monuments.svg" class="category-icon" /> <%-data.properties.title%></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <address><%-data.properties.address%> <%-data.properties.postcode%> <%-data.properties.city%> <%-data.properties.departement%> <%-data.properties.region%></address>
+                            <% if (data.properties.description){%>
+                                <p><%-data.properties.description%></p>
+                            <%}%>
+                            <% if (data.properties.website){%><p>web : <a href="http://<%=data.properties.website%>" target="_blank"><%=data.properties.website%> <i class="fa fa-sign-out"></i></a></p><%}%>
+                            <% if (data.properties.wikipedia){%>
+                            <p><span class="field-label">Wikipedia :</span> <a href="<%=data.properties.wikipedia%>" target="_blank"><%=data.properties.wikipedia%>&nbsp;<i class="fa fa-sign-out"></i></a></p>
+                            <%}%>
+                            <% if (data.properties.closed&&data.properties.closed!='non'){%>
+                                <div  class="alert alert-danger" class="text-center">
+                                 <span class="badge badge-danger">Fermée</span>
+                                <% if (data.properties.reopenYear&&data.properties.reopenYear!=''){%>Reouverture: <%=data.properties.reopenYear%><%}%>
+                                </div>
+                            <%}%>
+                            <% if (data.properties.openDays){%>
+                            <p><span class="field-label">Ouvert :</span> <%-data.properties.openDays%></p>
+                            <%}%>
+                            <% if (data.properties.lateNightDays){%>
+                            <p><span class="field-label">Ouverture nocturne :</span> <%-data.properties.lateNightDays%></p>
+                            <%}%>
+                            <% if (data.properties.closingDays){%>
+                            <p><span class="field-label">Fermé :</span> <%-data.properties.closingDays%></p>
+                            <%}%>
+                            <% if (data.properties.website){%><p>web : <a href="http://<%=data.properties.website%>" target="_blank"><%=data.properties.website%> <i class="fa fa-sign-out"></i></a></p><%}%>
+                            <% if (data.properties.wikipedia){%>
+                                <p><span class="field-label">Wikipedia :</span> <a href="<%=data.properties.wikipedia%>" target="_blank"><%=data.properties.wikipedia%>&nbsp;<i class="fa fa-sign-out"></i></a></p>
+                            <%}%>
+                        </div>
+                        <div class="col-md-6">
+                            <% if (data.properties.illustration&&data.properties.illustration.src&&data.properties.illustration.src!=''){%>
+                                <div class="photo-wrapper">
+                                    <img src="<%-data.properties.illustration.src%>" />
+                                </div>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    </script>
 		</div>
 	</div>
 	<div class="panels hidden" id="details"></div>
