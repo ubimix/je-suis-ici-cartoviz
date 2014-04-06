@@ -3,7 +3,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg version="1.0" id="Calque_8" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<circle fill="#00FFFF" cx="12.004" cy="11.882" r="11"/>
+<circle fill="maroon" cx="12.004" cy="11.882" r="11"/>
 <g id="g2551">
 	<g id="g2555">
 		<path id="path2557" fill="#FFFFFF" d="M12.933,5.677v12.69h-1.195V5.677H12.933z"/>
