@@ -184,6 +184,37 @@ p,h3 {
                     </div>
 			     </div>
             </script>
+
+                  <script data-template="Pharmacy" type="text/template">
+                             <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/pharmacie.svg" class="category-icon" /> <%-data.properties.label%></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <address><%-data.properties.numvoie%> <%-data.properties.typvoie%> <%-data.properties.voie%> <%-data.properties.cp%> <%-data.properties.libdepartement%></address>
+                            </div>
+                            <div class="col-md-4">
+                                <address><i class="fa fa-phone"></i> Tél: <%-data.properties.tel%></address>
+                            </div>
+                        </div>
+                    </div>
+                             </div>
+            </script>
+
+                 <script data-template="Sanisette" type="text/template">
+                             <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/toilettes.svg" class="category-icon" /> <%-data.   properties.type%></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <address><%-data.properties.label%></address>
+                            </div>
+                        </div>
+                    </div>
+                             </div>
+            </script>
+
+
 		</div>
 
 		<!-- Se deplacer -->
@@ -201,7 +232,7 @@ p,h3 {
 			</div>
 			<script data-template="Velib" type="text/template">
                  <div class="panel panel-default">
-                    <div class="panel-heading"><img src="layers/svg/icones-pastille/velib-pastille.svg" class="category-icon" /> Station Velib No <%-data.properties.number%></div>
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/velib-pastille.svg" class="category-icon" /> Station Vélib n° <%-data.properties.number%></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -211,6 +242,27 @@ p,h3 {
                     </div>
                  </div>
             </script>
+
+               <script data-template="AutoLib" type="text/template">
+                             <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/autolib-pastille.svg" class="category-icon" /> <%-data.properties.type_de_station%> <%-data.properties.label%></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+ <div>
+                            <div>Places : <%-data.properties.places_autolib%></div>
+                            <div>Recharge(s) : <%-data.properties.places_recharge_tiers%></div>
+                        </div>
+
+                            </div>
+                        </div>
+                    </div>
+                             </div>
+            </script>
+
+
+
 		</div>
 
 		<!-- Visiter -->
