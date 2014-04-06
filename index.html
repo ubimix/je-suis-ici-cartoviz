@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"></meta>
 <meta charset="utf-8"></meta>
 <link href='http://fonts.googleapis.com/css?family=Lato:400,700,300'
-    rel='stylesheet' type='text/css'>
+	rel='stylesheet' type='text/css'>
 
 <!-- External CSS styles -->
 <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css"></link>
 <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.css"></link>
 <link rel="stylesheet"
-    href="libs/bootstrap/dist/css/bootstrap-theme.css"></link>
+	href="libs/bootstrap/dist/css/bootstrap-theme.css"></link>
 <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
 <!--[if lte IE 8]><link rel="stylesheet" href="libs/leaflet/leaflet.ie.css" /><![endif]-->
 
@@ -23,36 +23,57 @@
 <script type="text/javascript" src="libs/leaflet/leaflet.js"></script>
 <script type="text/javascript" src="libs/q/q.js"></script>
 <script type="text/javascript"
-    src="libs/leaflet.utfgrid/leaflet.utfgrid.js"></script>
+	src="libs/leaflet.utfgrid/leaflet.utfgrid.js"></script>
 
 <!-- Specific CSS styles -->
 <style type="text/css">
 html,body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Lato', Arial, "Helvetica Neue", Helvetica, sans-serif;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Lato', Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 #map {
-    background-color: white;
-    position: absolute;
-    top: 50px;
-    left: 0px;
-    bottom: 0px;
-    right: 0px;
+	background-color: white;
+	position: absolute;
+	top: 50px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
 }
 
 .panels {
-    position: absolute;
-    left: 25%;
-    right: 25%;
-    bottom: 0px;
+	position: absolute;
+	left: 25%;
+	right: 25%;
+	bottom: 0px;
+}
+
+.panels .panel {
+	margin-bottom: 3px;
+}
+
+@media ( max-width : 768px) {
+	.panels {
+		left: 1%;
+		right: 1%;
+	}
+}
+
+.leftbox {
+	position: absolute;
+	left: 0px;
+	top: 55px;
+}
+
+.category-icon {
+	width: 1.5em;
 }
 
 p,h3 {
-    margin: 0.5em 0;
+	margin: 0.5em 0;
 }
 </style>
 
@@ -61,102 +82,134 @@ p,h3 {
 </head>
 <body>
 
-    <!-- Static navbar -->
-    <div class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span> <span
-                        class="icon-bar"></span> <span class="icon-bar"></span> <span
-                        class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Je suis ici</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="#" data-map-layer-selector="vivre">Vivre</a></li>
-                    <li><a href="#" data-map-layer-selector="sedeplacer">Se
-                            deplacer</a></li>
-                    <li><a href="#" data-map-layer-selector="visiter">Visiter</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown"><a href="#" class="dropdown-toggle"
-                        data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                            <li><a href="#">One more separated link</a></li>
-                        </ul></li>
-                </ul>
-            </div>
-            <!--/.nav-collapse -->
-        </div>
-    </div>
+	<!-- Static navbar -->
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Je suis ici</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="#" data-map-layer-selector="vivre"><img
+							src="layers/svg/icones-pastille/vivre.svg" class="category-icon" />
+							Vivre</a></li>
+					<li><a href="#" data-map-layer-selector="sedeplacer"><img
+							src="layers/svg/icones-pastille/sedeplacer.svg"
+							class="category-icon" /> Se deplacer</a></li>
+					<li><a href="#" data-map-layer-selector="visiter"><img
+							src="layers/svg/icones-pastille/visiter.svg"
+							class="category-icon" /> Visiter</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">FR <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li class="active"><a href="#">FR</a></li>
+							<li><a href="#">EN</a></li>
+							<li><a href="#">RU</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
 
-    <div class="container">
-        <div id="map" data-center="[2.343859076499939,48.864545373142235]"
-            data-zoom="17" data-min-zoom="10" data-max-zoom="18">
-            <div class="attribution">
-                Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
-                contributors
-            </div>
+	<div id="map" data-center="[2.343859076499939,48.864545373142235]"
+		data-zoom="17" data-min-zoom="10" data-max-zoom="18"
+		data-force-reload="true">
+		<div class="attribution">
+			Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
+			contributors
+		</div>
 
-            <div data-map-layer="background"
-                data-tiles-url="/tiles/layers/background/{z}/{x}/{y}.png"></div>
-            <!--             <div data-map-layer="background"
+		<div data-map-layer="background"
+			data-tiles-url="/tiles/layers/background/{z}/{x}/{y}.png"></div>
+		<!--             <div data-map-layer="background"
                 data-tiles-url="http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png"></div>
  -->
-            <!-- Vivre -->
-            <div data-map-layer="vivre"
-                data-tiles-url="/tiles/layers/vivre/{z}/{x}/{y}.png"
-                data-utfgrid-url="/tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
-                data-panel="#details" data-action="mouseover">
-                <div class="panel panel-default">
+		<!-- Vivre -->
+		<div data-map-layer="vivre"
+			data-tiles-url="/tiles/layers/vivre/{z}/{x}/{y}.png"
+			data-utfgrid-url="/tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-panel="#details" data-action="mouseover">
+			<div data-template="default">
+				<div class="panel panel-default">
+					<div class="panel-heading" data-property="data.properties.label"></div>
+					<div class="panel-body">
+						<div data-property="data.properties.type"></div>
+					</div>
+				</div>
+			</div>
+			<script data-template="LaPoste" type="text/template">
+			     <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/laposte.svg" class="category-icon" /> <%-data.properties.caracteristique_du_site%> <%-data.properties.label%></div>
                     <div class="panel-body">
-                        <h3>
-                            <span class="name" data-property="data.properties.label"></span>
-                        </h3>
-                        <div data-property="data.properties.type"></div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <address><%-data.properties.adresse%>, <%-data.properties.code_postal%> <%-data.properties.localite%>, <%-data.properties.pays%></address>
+                            </div>
+                            <div class="col-md-4">
+                                <address><i class="fa fa-phone"></i> Tél: <%-data.properties.tel%></address>
+                            </div>
+                        </div>
+                        <div>
+                            <%=icon('distributeur_de_billets', 'fa fa-money', 'Distributeur', 'Distributeur de billets')%>
+                            <%=icon('bornes_de_rechargement_moneo', 'fa fa-money', 'Moneo', 'Bornes de rechargement MONEO')%>
+                            <%=icon('accessibilite_entree_autonome_en_fauteuil_roulant_possible', 'fa fa-wheelchair', 'Entrée autonome en fauteuil roulant')%>
+                        </div>
                     </div>
-                </div>
-            </div>
+			     </div>
+            </script>
+		</div>
 
-            <!-- Se deplacer -->
-            <div data-map-layer="sedeplacer"
-                data-tiles-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.png"
-                data-utfgrid-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}"
-                data-panel="#details" data-action="mouseover">
-                <div class="panel panel-default">
+		<!-- Se deplacer -->
+		<div data-map-layer="sedeplacer"
+			data-tiles-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.png"
+			data-utfgrid-url="/tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-panel="#details" data-action="mouseover">
+			<div data-template="default">
+				<div class="panel panel-default">
+					<div class="panel-heading" data-property="data.properties.label"></div>
+					<div class="panel-body">
+						<div data-property="data.properties.type"></div>
+					</div>
+				</div>
+			</div>
+			<script data-template="Velib" type="text/template">
+                 <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/velib-pastille.svg" class="category-icon" /> Station Velib No <%-data.properties.number%></div>
                     <div class="panel-body">
-                        <h3>
-                            <span class="name" data-property="data.properties.label"></span>
-                        </h3>
-                        <div data-property="data.properties.type"></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <address><%-data.properties.address%></address>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                 </div>
+            </script>
+		</div>
 
-            <!-- Visiter -->
-            <div data-map-layer="visiter"
-                data-utfgrid-url="/tiles/layers/visiter/{z}/{x}/{y}.grid.json?callback={cb}"
-                data-tiles-url="/tiles/layers/visiter/{z}/{x}/{y}.png"
-                data-panel="#details" data-action="mouseover">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>
-                            <span class="name" data-property="data.properties.label"></span>
-                        </h3>
-                        <div data-property="data.properties.type"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panels hidden" id="details"></div>
-    </div>
+		<!-- Visiter -->
+		<div data-map-layer="visiter"
+			data-utfgrid-url="/tiles/layers/visiter/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-tiles-url="/tiles/layers/visiter/{z}/{x}/{y}.png"
+			data-panel="#details" data-action="mouseover">
+			<div data-template="default">
+				<div class="panel panel-default">
+					<div class="panel-heading" data-property="data.properties.label"></div>
+					<div class="panel-body">
+						<div data-property="data.properties.type"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panels hidden" id="details"></div>
 </body>
 </html>

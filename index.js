@@ -80,20 +80,62 @@
             url += '-' + new Date().getTime();
             return url;
         }
-        function buildContent(elm, data) {
-            var content = $('<div></div>').append(elm);
-            content.find('[data-property]').each(
-                    function() {
-                        var el = $(this);
-                        var f = eval('(function(data){return '
-                                + el.data('property') + ';})');
-                        var value = '';
-                        if (_.isFunction(f)) {
-                            value = f.call(data, data);
+        var templates = {};
+        function getTemplate(elm, type) {
+            var template = templates[type];
+            if (template)
+                return template;
+            var templateElm = elm.find('[data-template="' + type + '"]');
+            if (!templateElm[0]) {
+                templateElm = elm.find('[data-template="default"]');
+            }
+            var content;
+            if (templateElm.prop('tagName') == 'SCRIPT') {
+                var t = _.template(templateElm.text());
+                template = function(data) {
+                    var str = t({
+                        data : data,
+                        icon : function(key, css, text, title) {
+                            console.log(key, data.properties)
+                            if (!data.properties[key])
+                                return '';
+                            text = text || '';
+                            if (title && title != '') {
+                                title = ' title="' + title + '"'
+                            }
+                            var result = '<i class="' + css + '"' + title
+                                    + '/>';
+                            result += ' ' + text;
+                            return '<div>' + result + '</div>';
                         }
-                        el.text(value);
-                    })
-            return content;
+                    });
+                    return $('<div></div>').append(str);
+                }
+            } else {
+                var text = templateElm.html();
+                template = function(data) {
+                    var content = $('<div></div>').append(text);
+                    content.find('[data-property]').each(
+                            function() {
+                                var el = $(this);
+                                var f = eval('(function(data){return '
+                                        + el.data('property') + ';})');
+                                var value = '';
+                                if (_.isFunction(f)) {
+                                    value = f.call(data, data);
+                                }
+                                el.text(value);
+                            })
+                    return content;
+                }
+            }
+            templates[type] = template;
+            return template;
+        }
+        function formatContent(elm, data) {
+            var type = data.properties.type;
+            var template = getTemplate(elm, type);
+            return template ? template(data) : null;
         }
         var mapElement = $('#map');
         var center = mapElement.data('center') || [ 0, 0 ];
@@ -151,7 +193,8 @@
                     if (_.isString(data.geometry)) {
                         data.geometry = JSON.parse(data.geometry);
                     }
-                    var content = buildContent(elm, data);
+                    console.log(JSON.stringify(data, null, 2));
+                    var content = formatContent(elm, data);
                     panel.html(content);
                     panel.removeClass('hidden');
                     showMarker(data);
