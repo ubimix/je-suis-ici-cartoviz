@@ -25,14 +25,14 @@ var style = Utils.extendStyle({
             'marker-file' : 'url(../svg/maki/building-18.svg)'
         },
         '[type="Monument"]' : {
-            'marker-file' : 'url(../svg/maki/monument-18.svg)'
+            'marker-file' : 'url(../svg/icones-pastille/musee-monuments.svg)'
         },
         '[type="Museum"]' : {
-            'marker-file' : 'url(../svg/maki/museum-18.svg)'
+            'marker-file' : 'url(../svg/icones-pastille/musee-monuments.svg)'
         }
     }
 });
 
 module.exports = {
-    '#autolib' : style
+    '#objects' : style
 }

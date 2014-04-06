@@ -13,7 +13,6 @@ var zoomLevels = Utils.getMarkerZoomLevels({
 });
 
 var style = Utils.extendStyle({
-    'marker-fill' : '#857198',
     'marker-line-color' : 'white',
     'marker-placement' : 'point',
     'marker-type' : 'ellipse',
@@ -21,12 +20,10 @@ var style = Utils.extendStyle({
 }, zoomLevels, {
     '[zoom>=16]' : {
         '[type="Velib"]' : {
-            'marker-file' : 'url(../svg/maki/bicycle-18.svg)',
-            'marker-transform' : 'scale(1.2, 1.2)'
+            'marker-file' : 'url(../svg/icones-pastille/velib-pastille.svg)'
         },
         '[type="AutoLib"]' : {
-            'marker-file' : 'url(../svg/maki/car-18.svg)',
-            'marker-transform' : 'scale(0.8, 0.8)'
+            'marker-file' : 'url(../svg/icones-pastille/autolib-pastille.svg)'
         },
         '[type="GaresSNCF"]' : {
             'marker-file' : 'url(../svg/maki/rail-18.svg)'
