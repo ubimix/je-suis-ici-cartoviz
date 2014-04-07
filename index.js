@@ -198,6 +198,8 @@
                 function handler(ev) {
                     var panel = $(panelSelector);
                     var data = ev.data;
+                    if (!data)
+                        return;
                     if (_.isString(data.properties)) {
                         data.properties = JSON.parse(data.properties);
                         if (!data.properties.type) {
