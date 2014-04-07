@@ -5,10 +5,8 @@
     "dependencies" : {
         "underscore" : "*",
         "q" : "*",
-        "superagent" : "*",
-        "cheerio" : "*",
-        "terraformer-wkt-parser" : "*",
-        "pg" : "*"
+        "geocoder" : "*",
+        "mosaic-distil" : "git://github.com/ubimix/mosaic-distil.git"
     },
     "scripts" : {
         "run" : "node download-all.js"
