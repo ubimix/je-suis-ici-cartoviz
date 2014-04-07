@@ -215,6 +215,76 @@ p,h3 {
             </script>
 
 
+			<script data-template="EspacePublique" type="text/template">
+                             <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/municipal.svg" class="category-icon" /> <%-data.properties.label%></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <%-data.properties.type_d_equipement%> <address><%-data.properties.ap_num%> <%-data.properties.ap_voie%> <%-data.properties.ap_cp%> Paris</address>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                        </div>
+                    </div>
+                             </div>
+            </script>
+
+
+			<script data-template="Kiosque" type="text/template">
+                             <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/kiosque.svg" class="category-icon" /> Kiosque - <%-data.properties.adresse%>, <%-data.properties.arrdt%> PARIS</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                               
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                        </div>
+                    </div>
+                             </div>
+            </script>
+
+			<script data-template="EtablissementHospitalier" type="text/template">
+                             <div class="panel panel-default">
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/hopital.svg" class="category-icon" /> <%-data.properties.label%></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <address><%-data.properties.adresse_complete%> <%-data.properties.cp_ville%> </address>
+			   </div>
+    <div class="col-md-4">
+    <div><address>
+    <i class="fa fa-phone"></i>Tél : <%-data.properties.tel%></address>
+    </div>
+
+                            </div>
+</div>
+<div class="row">
+<div class="col-md-12">
+    <div>
+        <span class="field-label">Catégorie :</span> <%-data.properties.categorie_de_l_etablissement%>
+    </div><!--
+    <div>
+    <span class="field-label">Type d'établissement :</span> <%-data.properties.categorie_de_l_etablissement%>
+    </div>
+-->
+    <div>
+    <span class="field-label">Tarification :</span> <%-data.properties.lib_tarification%>
+    </div>
+    <div>
+    <span class="field-label">Type :</span> <%-data.properties.participant_service_public_hospitalier%>
+    </div>
+    <div>
+    <span class="field-label">Date d'ouverture :</span> <%-data.properties.date_ouverture%>
+    </div>
+    </div>
+                    </div>
+                             </div>
+            </script>
+
+
 		</div>
 
 		<!-- Se deplacer -->
@@ -245,14 +315,14 @@ p,h3 {
 
                <script data-template="AutoLib" type="text/template">
                              <div class="panel panel-default">
-                    <div class="panel-heading"><img src="layers/svg/icones-pastille/autolib-pastille.svg" class="category-icon" /> <%-data.properties.type_de_station%> <%-data.properties.label%></div>
+                    <div class="panel-heading"><img src="layers/svg/icones-pastille/autolib-pastille.svg" class="category-icon" /> <%-data.properties.type_de_station%> AutoLib – <%-data.properties.label%></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
 
  <div>
-                            <div>Places : <%-data.properties.places_autolib%></div>
-                            <div>Recharge(s) : <%-data.properties.places_recharge_tiers%></div>
+                            <div><span class="field-label">Places :</span> <%-data.properties.places_autolib%></div>
+                            <div><span class="field-label">Recharge(s) :</span> <%-data.properties.places_recharge_tiers%></div>
                         </div>
 
                             </div>
