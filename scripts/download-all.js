@@ -79,8 +79,6 @@ return dataProvider.handleAll(listener).fail(function(err) {
     console.log(' * >>> ', err.stack);
 }).done();
 
-;
-
 // Common properties:
 // - type
 // - label
