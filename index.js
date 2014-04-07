@@ -9,6 +9,18 @@
         initLayerSwitchers();
     });
 
+    function getUrlVars(str) {
+        str = str || window.location.href;
+        var vars = [], hash;
+        var hashes = str.slice(str.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
     function initLayerSwitchers() {
         $('[data-map-layer-selector]').each(function() {
             var el = $(this);
@@ -182,9 +194,8 @@
                     zIndex : zIndex + 1000
                 });
                 var html = elm.html();
-                var panelSelector = elm.data('panel') || '#info';
-                var action = elm.data('action') || 'mouseover';
-                gridLayer.on(action, function(ev) {
+
+                function handler(ev) {
                     var panel = $(panelSelector);
                     var data = ev.data;
                     if (_.isString(data.properties)) {
@@ -201,14 +212,24 @@
                     panel.html(content);
                     panel.removeClass('hidden');
                     showMarker(data);
-                });
+                }
+                var panelSelector = elm.data('panel') || '#info';
+                var actions = elm.data('action') || 'mouseover';
+                _.each(actions.split(/[,;]/gim), function(action) {
+                    console.log('ACTION:', action)
+                    gridLayer.on(action, handler);
+                })
                 layerInfo.grid = gridLayer;
             }
         })
         mapElement.html('');
 
+        var params = getUrlVars();
+        var scroll = params['wheel-scroll'];
+        scroll = !(scroll == 'no' || scroll == 'false' || scroll == '0');
         var map = result.map = L.map(mapElement[0], {
-            zoomControl : false
+            zoomControl : false,
+            scrollWheelZoom : scroll
         });
         map.addControl(L.control.zoom({
             position : 'topright'
