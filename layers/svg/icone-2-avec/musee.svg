@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="960px" height="560px" viewBox="0 0 960 560" enable-background="new 0 0 960 560" xml:space="preserve">
+<path fill="#FFFFFF" d="M481.105,175.604c-57.221,0-103.774,46.553-103.774,103.773s46.553,103.773,103.774,103.773
+	c57.221,0,103.773-46.553,103.773-103.773S538.326,175.604,481.105,175.604z M481.105,379.151
+	c-55.016,0-99.774-44.758-99.774-99.773c0-55.015,44.758-99.773,99.774-99.773s99.773,44.758,99.773,99.773
+	C580.879,334.394,536.121,379.151,481.105,379.151z"/>
+<g>
+	<circle fill="#983333" cx="481.505" cy="279.221" r="101.528"/>
+	<g>
+		<rect x="446" y="271" fill="#FFFFFF" width="15" height="36"/>
+		<polygon fill="#FFFFFF" points="447.293,244 482.891,224 482.115,224 517.715,244 		"/>
+		<rect x="474" y="271" fill="#FFFFFF" width="15" height="36"/>
+		<rect x="435" y="312" fill="#FFFFFF" width="92" height="15"/>
+		<rect x="435" y="249" fill="#FFFFFF" width="92" height="15"/>
+		<rect x="502" y="271" fill="#FFFFFF" width="15" height="36"/>
+	</g>
+</g>
+</svg>
