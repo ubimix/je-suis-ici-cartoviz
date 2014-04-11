@@ -16,12 +16,16 @@
 	href="libs/bootstrap/dist/css/bootstrap-theme.css"></link>
 <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
 <!--[if lte IE 8]><link rel="stylesheet" href="libs/leaflet/leaflet.ie.css" /><![endif]-->
+<link rel="stylesheet"
+	href="libs/leaflet-locationfilter/src/locationfilter.css"></link>
 
 <!-- JavaScript libraries -->
 <script type="text/javascript" src="libs/jquery/jquery.js"></script>
 <script type="text/javascript" src="libs/underscore/underscore.js"></script>
 <script type="text/javascript" src="libs/bootstrap/dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="libs/leaflet/leaflet.js"></script>
+<script type="text/javascript"
+	src="libs/leaflet-locationfilter/src/locationfilter.js"></script>
 <script type="text/javascript" src="libs/q/q.js"></script>
 <script type="text/javascript"
 	src="libs/leaflet.utfgrid/leaflet.utfgrid.js"></script>
@@ -50,6 +54,12 @@ html,body {
 	left: 25%;
 	right: 25%;
 	bottom: 0px;
+}
+
+.panels .panel .panel-body {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 address {
@@ -122,6 +132,20 @@ p,h3 {
 							Visiter</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" class="btn" data-visible-in-export-mode="true"
+						data-map-export-btn="true">Generate </a></li>
+					<li><a href="#" class="btn" data-visible-in-export-mode="true"
+						data-map-export-btn="false">Cancel </a></li>
+						
+					<li class="dropdown" data-visible-in-export-mode="false"><a
+						href="#" class="dropdown-toggle" data-toggle="dropdown">Export
+							<b class="caret"></b>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a href="#" data-map-export="pdf">PDF</a></li>
+							<li><a href="#" data-map-export="svg">SVG</a></li>
+							<li><a href="#" data-map-export="png">PNG</a></li>
+						</ul></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">FR <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -145,11 +169,11 @@ p,h3 {
 				Données &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
 			</div>
 		</div>
-		<!--             <div data-map-layer="background"  data-visible="true"
+		<!--             <div data-map-layer="background"
                 data-tiles-url="http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png"></div>
  -->
 		<!-- Vivre -->
-		<div data-map-layer="vivre" data-visible="true"
+		<div data-map-layer="vivre"
 			data-tiles-url="tiles/layers/vivre/{z}/{x}/{y}.png"
 			data-utfgrid-url="tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-panel="#details" data-action="mouseover,click">
@@ -290,7 +314,7 @@ p,h3 {
 		</div>
 
 		<!-- Se deplacer -->
-		<div data-map-layer="sedeplacer" data-visible="true"
+		<div data-map-layer="sedeplacer"
 			data-tiles-url="tiles/layers/sedeplacer/{z}/{x}/{y}.png"
 			data-utfgrid-url="tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-panel="#details" data-action="mouseover,click">
@@ -339,7 +363,7 @@ p,h3 {
 
 		<!-- Visiter -->
 		<!-- 
-		<div data-map-layer="visiter"  data-visible="true"
+		<div data-map-layer="visiter"
 			data-utfgrid-url="tiles/layers/visiter/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-tiles-url="tiles/layers/visiter/{z}/{x}/{y}.png"
 			data-panel="#details" data-action="mouseover,click">
@@ -354,7 +378,7 @@ p,h3 {
 		</div>
  -->
 		<!-- Monuments -->
-		<div data-map-layer="monuments" data-visible="true"
+		<div data-map-layer="monuments"
 			data-utfgrid-url="tiles/layers/monuments/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-tiles-url="tiles/layers/monuments/{z}/{x}/{y}.png"
 			data-panel="#details" data-action="mouseover,click">

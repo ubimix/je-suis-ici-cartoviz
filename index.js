@@ -4,9 +4,10 @@
     $(function() {
         mapInfo = initMap();
         _.each(mapInfo.layers, function(info, id) {
-            toggleLayer(id);
+            setLayerVisibility(info, info.visible);
         })
         initLayerSwitchers();
+        initPrinting();
     });
 
     function getUrlVars(str) {
@@ -19,6 +20,170 @@
             vars[hash[0]] = hash[1];
         }
         return vars;
+    }
+
+    var exportMask = '<%=protocol%>//<%=hostname%><%=port%>'
+            + '/export/layers/background/'
+            + '<%=zoom%>/<%=west%>,<%=south%>,<%=east%>,<%=north%>/map.<%=format%>';
+
+    function initPrinting1() {
+        var exportBtn = $('[data-map-export-btn]');
+        var startExport = $('[data-map-export-start]');
+        if (!exportBtn[0] || !startExport[0])
+            return;
+
+        var A4 = {
+            width : 210,
+            height : 297
+        };
+        var areaSelect;
+        var areaBounds;
+        function hideSelector() {
+            if (areaSelect) {
+                // mapInfo.map.removeLayer(areaSelect);
+                // areaSelect = undefined;
+            }
+        }
+        function showSelector() {
+            hideSelector();
+            areaSelect = L.areaSelect({
+                width : A4.height,
+                height : A4.width,
+            // keepAspectRatio : true
+            });
+            areaSelect.addTo(mapInfo.map);
+            function updateBounds() {
+                var bounds = areaSelect.getBounds();
+                areaBounds = {
+                    east : bounds._northEast.lng,
+                    north : bounds._northEast.lat,
+                    west : bounds._southWest.lng,
+                    south : bounds._southWest.lat
+                }
+            }
+            areaSelect.on("change", function() {
+                updateBounds();
+            });
+            updateBounds();
+        }
+
+        var exportFormat = 'pdf';
+        function setExportMode(exp) {
+            if (exp) {
+                exportBtn.parent().show();
+                startExport.hide();
+            } else {
+                exportBtn.parent().hide();
+                startExport.show();
+            }
+        }
+        $('[data-map-export]').each(function() {
+            var elm = $(this);
+            elm.click(function(ev) {
+                exportFormat = elm.data('map-export');
+                showSelector();
+                setExportMode(true);
+            })
+        });
+        exportBtn.click(function(ev) {
+            hideSelector();
+            setExportMode(false);
+            var currentLocation = window.location;
+            var port = currentLocation.port;
+            if (port && port != 80 && port != '80') {
+                port = ':' + port;
+            } else {
+                port = '';
+            }
+            var options = _.extend({}, areaBounds, {
+                zoom : mapInfo.map.getZoom(),
+                format : exportFormat,
+                protocol : currentLocation.protocol,
+                hostname : currentLocation.hostname,
+                port : port
+            });
+            var url = _.template(exportMask, options);
+            window.location = url;
+        });
+        setExportMode(false);
+    }
+
+    function initPrinting() {
+        var A4 = {
+            width : 210,
+            height : 297
+        };
+        function setExportMode(exp) {
+            $('[data-visible-in-export-mode]').each(function() {
+                var el = $(this);
+                if (exp == el.data('visible-in-export-mode')) {
+                    el.show();
+                } else {
+                    el.hide();
+                }
+            })
+        }
+        var exporting;
+        mapInfo.map.on('export:start', function(ev) {
+            console.log('START EXPORT');
+            setExportMode(true);
+            showSelector();
+        })
+        mapInfo.map.on('export:stop', function(ev) {
+            console.log('STOP EXPORT', ev.cancel);
+            setExportMode(false);
+            hideSelector();
+            if (ev.cancel)
+                return;
+            var format = ev.format;
+            var boundingBox = ev.bbox;
+            var zoom = ev.zoom;
+
+            console.log(zoom, format, boundingBox);
+        })
+
+        var areaSelect;
+        var format;
+        function hideSelector() {
+            if (areaSelect) {
+                mapInfo.map.removeLayer(areaSelect);
+                delete areaSelect;
+            }
+        }
+        function showSelector() {
+            hideSelector();
+            areaSelect = new L.LocationFilter();
+            areaSelect.addTo(mapInfo.map);
+            areaSelect.on("change", function() {
+                var bounds = areaSelect.getBounds();
+                console.log("Bounds:", this.getBounds());
+            });
+        }
+
+        $('[data-map-export-btn]').each(function() {
+            var elm = $(this);
+            elm.click(function() {
+                var ok = !!elm.data('map-export-btn');
+                var bbox = areaSelect.getBounds()
+                mapInfo.map.fire('export:stop', {
+                    zoom : mapInfo.map.getZoom(),
+                    boundingBox : bbox,
+                    format : format,
+                    cancel : !ok
+                });
+            })
+        })
+
+        $('[data-map-export]').each(function() {
+            var elm = $(this);
+            elm.click(function() {
+                format = elm.data('map-export');
+                mapInfo.map.fire('export:start', {});
+            })
+        })
+
+        setExportMode(false);
+
     }
 
     function initLayerSwitchers() {
@@ -35,11 +200,10 @@
         })
     }
 
-    function toggleLayer(id) {
-        var info = mapInfo.layers[id];
+    function setLayerVisibility(info, visible) {
         if (!info)
             return;
-        info.visible = !info.visible;
+        info.visible = !!visible;
         _.each([ info.tiles, info.grid ], function(layer) {
             if (!layer)
                 return;
@@ -49,6 +213,13 @@
                 mapInfo.map.removeLayer(layer);
             }
         })
+    }
+
+    function toggleLayer(id) {
+        var info = mapInfo.layers[id];
+        if (!info)
+            return;
+        setLayerVisibility(info, !info.visible);
     }
 
     var marker;
@@ -165,9 +336,11 @@
         mapElement.find('[data-map-layer]').each(function() {
             var elm = $(this);
             var id = elm.data('map-layer');
+            var visible = elm.data('visible');
+            visible = !!visible;
             zIndex++;
             var layerInfo = layers[id] = {
-                visible : false
+                visible : visible
             };
             var tilesUrl = elm.data('tiles-url');
             if (tilesUrl) {
@@ -218,7 +391,6 @@
                 var panelSelector = elm.data('panel') || '#info';
                 var actions = elm.data('action') || 'mouseover';
                 _.each(actions.split(/[,;]/gim), function(action) {
-                    console.log('ACTION:', action)
                     gridLayer.on(action, handler);
                 })
                 layerInfo.grid = gridLayer;
