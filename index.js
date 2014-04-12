@@ -125,25 +125,47 @@
         }
         var exporting;
         mapInfo.map.on('export:start', function(ev) {
-            console.log('START EXPORT');
             setExportMode(true);
             showSelector();
         })
+
         mapInfo.map.on('export:stop', function(ev) {
-            console.log('STOP EXPORT', ev.cancel);
             setExportMode(false);
             hideSelector();
             if (ev.cancel)
                 return;
-            var format = ev.format;
-            var boundingBox = ev.bbox;
-            var zoom = ev.zoom;
+        })
 
-            console.log(zoom, format, boundingBox);
+        mapInfo.map.on('export:generate', function(ev) {
+            var format = ev.format;
+            var bounds = ev.bbox;
+            var areaBounds = {
+                east : bounds._northEast.lng,
+                north : bounds._northEast.lat,
+                west : bounds._southWest.lng,
+                south : bounds._southWest.lat
+            }
+            var zoom = ev.zoom;
+            var currentLocation = window.location;
+            var port = currentLocation.port;
+            if (port && port != 80 && port != '80') {
+                port = ':' + port;
+            } else {
+                port = '';
+            }
+            var options = _.extend({}, areaBounds, {
+                zoom : mapInfo.map.getZoom(),
+                format : format,
+                protocol : currentLocation.protocol,
+                hostname : currentLocation.hostname,
+                port : port
+            });
+            var url = _.template(exportMask, options);
+            var win = window.open(url, '_blank');
+            win.focus();
         })
 
         var areaSelect;
-        var format;
         function hideSelector() {
             if (areaSelect) {
                 mapInfo.map.removeLayer(areaSelect);
@@ -152,8 +174,21 @@
         }
         function showSelector() {
             hideSelector();
-            areaSelect = new L.LocationFilter();
-            areaSelect.addTo(mapInfo.map);
+            var map = mapInfo.map;
+
+            var viewBounds = map.getPixelBounds();
+            var center = viewBounds.getCenter();
+            var delta = viewBounds.getSize().multiplyBy(3 / 8);
+            var sw = map.unproject(center.subtract(delta));
+            var ne = map.unproject(center.add(delta));
+            var bounds = new L.LatLngBounds(sw, ne);
+            areaSelect = new L.LocationFilter({
+                bounds : bounds,
+                enable : true,
+                enableButton : false,
+                adjustButton : false
+            });
+            areaSelect.addTo(map);
             areaSelect.on("change", function() {
                 var bounds = areaSelect.getBounds();
                 console.log("Bounds:", this.getBounds());
@@ -164,20 +199,23 @@
             var elm = $(this);
             elm.click(function() {
                 var ok = !!elm.data('map-export-btn');
-                var bbox = areaSelect.getBounds()
-                mapInfo.map.fire('export:stop', {
-                    zoom : mapInfo.map.getZoom(),
-                    boundingBox : bbox,
-                    format : format,
-                    cancel : !ok
-                });
+                if (!ok) {
+                    mapInfo.map.fire('export:stop');
+                } else {
+                    var bbox = areaSelect.getBounds();
+                    var format = $('[data-map-export-format]').val();
+                    mapInfo.map.fire('export:generate', {
+                        zoom : mapInfo.map.getZoom(),
+                        bbox : bbox,
+                        format : format
+                    });
+                }
             })
         })
 
         $('[data-map-export]').each(function() {
             var elm = $(this);
             elm.click(function() {
-                format = elm.data('map-export');
                 mapInfo.map.fire('export:start', {});
             })
         })
