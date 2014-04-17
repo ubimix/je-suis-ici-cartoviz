@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Je suis ici</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"></meta>
+<meta charset="utf-8"></meta>
+<!-- <link href='http://fonts.googleapis.com/css?family=Lato:400,700,300'
+	rel='stylesheet' type='text/css'>
+ -->
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- External CSS styles -->
+<link rel="stylesheet" href="../libs/bootstrap/dist/css/bootstrap.css"></link>
+<link rel="stylesheet" href="../libs/font-awesome/css/font-awesome.css"></link>
+<link rel="stylesheet"
+	href="../libs/bootstrap/dist/css/bootstrap-theme.css"></link>
+<link rel="stylesheet" href="../libs/leaflet/leaflet.css" />
+<!--[if lte IE 8]><link rel="stylesheet" href="../libs/leaflet/leaflet.ie.css" /><![endif]-->
+<link rel="stylesheet" type="text/css"
+	href="../libs/leaflet.markercluster/MarkerCluster.css" media="screen" />
+<link rel="stylesheet" type="text/css"
+	href="../libs/leaflet.markercluster/MarkerCluster.Default.css"
+	media="screen" />
+
+<link rel="stylesheet"
+	href="../libs/leaflet-locationfilter/src/locationfilter.css"></link>
+
+<!-- JavaScript libraries -->
+<script type="text/javascript" src="../libs/jquery/jquery.js"></script>
+<script type="text/javascript" src="../libs/underscore/underscore.js"></script>
+<script type="text/javascript"
+	src="../libs/bootstrap/dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="../libs/leaflet/leaflet.js"></script>
+<script type="text/javascript"
+	src="../libs/leaflet.markercluster/leaflet.markercluster.js"></script>
+<script type="text/javascript" src="../libs/mosaic-ui/app/Mosaic.js"></script>
+<script type="text/javascript"
+	src="../libs/leaflet-locationfilter/src/locationfilter.js"></script>
+<script type="text/javascript" src="../libs/q/q.js"></script>
+<script type="text/javascript"
+	src="../libs/leaflet.utfgrid/leaflet.utfgrid.js"></script>
+
+<!-- Specific CSS styles -->
+<style type="text/css">
+html,body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Lato', Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+#map {
+	background-color: white;
+	position: absolute;
+	top: 50px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background-color: #eee;
+}
+
+.panels {
+	position: absolute;
+	left: 25%;
+	right: 25%;
+	bottom: 0px;
+}
+
+.panels .panel .panel-body {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.panel .panel-body h4 {
+	font-size: 1.3em;
+	margin: 0 0 0.5em 0;
+	color: gray;
+}
+
+address {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.photo-wrapper img {
+	max-height: 200px;
+	border: 1px solid silver;
+	-webkit-box-shadow: 2px 2px 11px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow: 2px 2px 11px 0px rgba(50, 50, 50, 0.75);
+	box-shadow: 2px 2px 11px 0px rgba(50, 50, 50, 0.75);
+}
+
+.leaflet-popup-content-wrapper {
+	padding: 0px;
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+	margin: 0;
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content .panel {
+	margin-bottom: 0;
+	border: none;
+}
+
+.panels .panel {
+	
+}
+
+@media ( max-width : 768px) {
+	.panels {
+		left: 1%;
+		right: 1%;
+	}
+}
+
+.leftbox {
+	position: absolute;
+	left: 0px;
+	top: 55px;
+}
+
+.category-icon {
+	width: 1.5em;
+}
+
+.field-label {
+	color: gray;
+}
+
+p,h3 {
+	margin: 0.5em 0;
+}
+</style>
+
+<script type="text/javascript" src="./index.js"></script>
+
+</head>
+<body>
+
+	<!-- Static navbar -->
+	<div class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Je suis ici</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="#" data-map-layer-selector="vivre"> Vivre</a></li>
+					<li><a href="#" data-map-layer-selector="sedeplacer"> Se
+							déplacer</a></li>
+					<!-- <li><a href="#" data-map-layer-selector="visiter"> Visiter</a></li> -->
+					<li><a href="#" data-map-layer-selector="monuments">
+							Visiter</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">FR <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li class="active"><a href="#">FR</a></li>
+							<li><a href="#">EN</a></li>
+							<li><a href="#">RU</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+
+	<div id="map" data-center="[2.343859076499939,48.864545373142235]"
+		data-zoom="17" data-min-zoom="2" data-max-zoom="18">
+
+		<div data-map-layer="background" data-visible="true"
+			data-tiles-url="../tiles/layers/background/{z}/{x}/{y}.png"
+			data-force-reload="true">
+			<div class="attribution">
+				Données &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
+			</div>
+		</div>
+
+		<!-- Vivre -->
+		<div data-map-layer="vivre" data-visible="true"
+			data-tiles-url="../tiles/layers/vivre/{z}/{x}/{y}.png"
+			data-utfgrid-url="../tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-force-reload="true">
+			<div class="attribution">
+				&copy; <a href="http://opendata.paris.fr/">Ville de Paris</a> &copy;
+				<a href="http://data.iledefrance.fr">Paris Région</a> &copy; <a
+					href="http://data.gouv.fr">Etalab</a>
+			</div>
+		</div>
+
+		<!-- Se deplacer -->
+		<div data-map-layer="sedeplacer" data-visible="true"
+			data-tiles-url="../tiles/layers/sedeplacer/{z}/{x}/{y}.png"
+			data-utfgrid-url="../tiles/layers/sedeplacer/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-force-reload="true"></div>
+
+	</div>
+
+	<div id="templates" style="display: none;">
+
+		<div id="ParentTemplate">
+			<script type="text/javascript" data-type="static">
+                ({
+
+                })
+            </script>
+			<script type="text/javascript">
+                ({
+                    isValid : function(resource) {
+                        var label = this.getLabel();
+                        return label && label != '';
+                    },
+                    renderLabel : function(elm) {
+                        var label = this.getLabel();
+                        elm.text(label);
+                    },
+                    getLabel : function() {
+                        var resource = this.getResource();
+                        var label = resource.properties.label;
+                        return label;
+                    },
+                    popupOptions : {
+                        minWidth : 50,
+                        maxWidth : 350
+                    },
+                    renderDescription : function(elm) {
+                        var resource = this.getResource();
+                        var str = resource.properties.description || '';
+                        var maxLen = 100;
+                        if (str.length > maxLen) {
+                            var idx;
+                            for (idx = maxLen; idx < str.length; idx++) {
+                                var ch = str[idx];
+                                if (ch == ' ' || ch == ';' || ch == '.')
+                                    break;
+                            }
+                            idx = Math.max(idx, maxLen);
+                            str = str.substring(0, idx) + '...';
+                        }
+                        elm.text(str);
+                    },
+                    renderContacts : function(elm) {
+                        var resource = this.getResource();
+                        var str = '';
+                        _.each([ 'tel', 'fax', 'horaires' ], function(key) {
+                            var value = resource.properties[key];
+                            if (value && value != '') {
+                                str += '<div>' + key + ' : ' + value + '</div>'
+                            }
+                        })
+                        elm.html(str);
+                    }
+                })
+            </script>
+		</div>
+
+		<div data-resource-type="Default" data-view="MapFocusedPopupView"
+			data-extends="#ParentTemplate">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<span data-render="renderLabel"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div data-resource-type="Velib" data-view="MapFocusedPopupView"
+			data-extends="#ParentTemplate">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div data-action-click="activateResource">
+								<img src="../layers/svg/icones-pastille/velib-pastille.svg"
+									class="category-icon" /> Station Vélib n° <span
+									data-render="rendreVelibNumber">1</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+                ({
+                    rendreVelibNumber : function(elm) {
+                        var resource = this.getResource();
+                        elm.text('' + resource.properties.number);
+                    },
+                    renderAddress : function(elm) {
+                        var resource = this.getResource();
+                        elm.text(resource.properties.address);
+                    }
+                })
+            </script>
+		</div>
+		<div data-resource-type="Velib" data-view="MapActivePopupView"
+			data-extends="[data-resource-type='Velib'][data-view='MapFocusedPopupView']">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<img src="../layers/svg/icones-pastille/velib-pastille.svg"
+						class="category-icon" /> Station Vélib n° <span
+						data-render="rendreVelibNumber">1</span>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<h4 data-render="renderLabel"></h4>
+							<address data-render="renderAddress">addr</address>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div data-resource-type="LaPoste" data-view="MapFocusedPopupView"
+			data-extends="#ParentTemplate">
+			<div class="panel panel-default">
+				<div class="panel-body" data-action-click="activateResource">
+					<img src="
+					../layers/svg/icones-pastille/laposte.svg"
+						class="category-icon" /> <span data-render="renderLabel">1</span>
+				</div>
+			</div>
+			<script>
+                ({
+                    getLabel : function() {
+                        var resource = this.getResource();
+                        return resource.properties.label;
+                    }
+                })
+            </script>
+		</div>
+		<div data-resource-type="LaPoste" data-view="MapActivePopupView"
+			data-extends="[data-resource-type='LaPoste'][data-view='MapFocusedPopupView']">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<img src="../layers/svg/icones-pastille/laposte.svg"
+						class="category-icon" /> <span data-render="renderLabel">1</span>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<h4 data-render="renderLabel"></h4>
+							<address data-render="renderAddress">addr</address>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+                (
+                        {
+                            renderAddress : function(elm) {
+                                var resource = this.getResource();
+                                var data = resource.properties;
+                                var str = data.adresse + ' ' + data.localite
+                                        + ' ' + data.code_postal;
+                                elm.text(str);
+                            }
+                        })
+            </script>
+		</div>
+
+		<!--  -->
+		<div data-resource-type="Entreprise" data-view="MapMarkerView"
+			data-extends="#ParentTemplate">
+			<div style="white-space: nowrap;">
+				<i style="color: #C1108B;" class="fa fa-map-marker fa-2x"></i><i
+					class="fa fa-caret-left" style="color: gray;"></i><span
+					style="background-color: white; border: 1px solid gray; border-radius: 3px; padding: 0.1em 0.5em;"
+					data-render="renderLabel"></span>
+			</div>
+			<script type="text/javascript">
+                ({
+                    icon : {
+                        iconAnchor : [ 6, 24 ],
+                        popupAnchor : [ 0, -24 ],
+                    },
+                    getLabel : function() {
+                        var resource = this.getResource();
+                        return resource.properties.name;
+                    }
+                })
+            </script>
+		</div>
+
+		<div data-resource-type="Entreprise" data-view="MapFocusedPopupView"
+			data-extends="#ParentTemplate">
+			<div class="panel panel-default" data-action-click="activateResource">
+				<div class="panel-heading">
+					<span data-render="renderLabel"></span>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<address data-render="renderAddress">addr</address>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+                (
+                        {
+                            getLabel : function() {
+                                var resource = this.getResource();
+                                return resource.properties.name;
+                            },
+                            renderAddress : function(elm) {
+                                var resource = this.getResource();
+                                var data = resource.properties;
+                                var array = _.filter(_.map([ 'address', 'city',
+                                        'postcode' ], function(key) {
+                                    return data[key];
+                                }), function(value) {
+                                    return value;
+                                });
+                                var str = array.join(', ');
+                                elm.text(str);
+                            }
+                        })
+            </script>
+		</div>
+		<div data-resource-type="Entreprise" data-view="MapActivePopupView"
+			data-extends="[data-resource-type='Entreprise'][data-view='MapFocusedPopupView']">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 data-render="renderLabel"></h4>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<address data-render="renderAddress"></address>
+							<div data-render="renderURL" data-field="url">
+								Web: <a></a>
+							</div>
+							<div data-render="renderURL" data-field="linkedin">
+								LinkedIn: <a></a>
+							</div>
+							<div data-render="renderTwitter" data-field="twitter">
+								Twitter: <a></a>
+							</div>
+							<div data-render="renderURL" data-field="facebook">
+								Facebook: <a></a>
+							</div>
+							<div data-render="renderDescription"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+                ({
+                    renderDescription : function(elm) {
+                        var resource = this.getResource();
+                        var data = resource.properties;
+                        var str = data.description;
+                        if (!str || str == '') {
+                            elm.remove();
+                        } else {
+                            elm.text(str);
+                        }
+                    },
+                    renderURL : function(elm) {
+                        var resource = this.getResource();
+                        var data = resource.properties;
+                        var field = elm.data('field');
+                        var str = data[field];
+                        if (!str || str == '') {
+                            elm.remove();
+                        } else {
+                            var a = elm.find('a');
+                            a.attr('href', str).text(str);
+                        }
+                    },
+                    renderTwitter : function(elm) {
+                        var resource = this.getResource();
+                        var data = resource.properties;
+                        var str = data.twitter;
+                        if (!str || str == '') {
+                            elm.remove();
+                        } else {
+                            var href = 'http://www.twitter.com/' + str;
+                            var a = elm.find('a');
+                            a.attr('href', href).text('#' + str);
+                        }
+                    }
+                })
+            </script>
+		</div>
+
+	</div>
+
+</body>
+</html>
