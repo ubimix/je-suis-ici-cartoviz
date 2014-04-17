@@ -38,7 +38,7 @@ Map { font-directory: url(./fonts); }
 /* ================================================================== */
 @green_zone: #D9E585;
 
-@land:              #EAEAEA; /* #FCFBE7; */
+@land:              white; /* #FCFBE7; */
 @water:             #70A1C2; /* #9EDAEF; */ /* #C4DFF6; */
 @grass:             lighten(@green_zone,5%); /* #E6F2C1; */
 @beach:             #FFEEC7;
@@ -48,7 +48,7 @@ Map { font-directory: url(./fonts); }
 @agriculture:       #F2E8B6;
 
 @lighten:           5%;
-@building:          #CCBDBE; /* #E4E0E0; */
+@building:          #eee; /* #E4E0E0; */
 @building_light:    lighten(@building,@lighten); 
 @hospital:          #A99697; /* rgb(229,198,195); */
 @school:            #FFF5CC;
