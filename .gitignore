@@ -9,3 +9,5 @@ sql
 /photos
 /npm-debug.log
 tmp
+/sandbox
+.thumb.png
