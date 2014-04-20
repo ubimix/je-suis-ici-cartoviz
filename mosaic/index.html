@@ -175,7 +175,7 @@ p,h3 {
 		</div>
 	</div>
 
-	<div id="map" data-center="[2.343859076499939,48.864545373142235]"
+	<div id="map" data-center="[2.336171865463257,48.865032363996]"
 		data-zoom="17" data-min-zoom="2" data-max-zoom="18">
 
 		<div data-map-layer="background" data-visible="true"
@@ -190,6 +190,18 @@ p,h3 {
 		<div data-map-layer="vivre" data-visible="true"
 			data-tiles-url="../tiles/layers/vivre/{z}/{x}/{y}.png"
 			data-utfgrid-url="../tiles/layers/vivre/{z}/{x}/{y}.grid.json?callback={cb}"
+			data-force-reload="true">
+			<div class="attribution">
+				&copy; <a href="http://opendata.paris.fr/">Ville de Paris</a> &copy;
+				<a href="http://data.iledefrance.fr">Paris Région</a> &copy; <a
+					href="http://data.gouv.fr">Etalab</a>
+			</div>
+		</div>
+
+		<!-- Visiter -->
+		<div data-map-layer="monuments" data-visible="true"
+			data-tiles-url="../tiles/layers/monuments/{z}/{x}/{y}.png"
+			data-utfgrid-url="../tiles/layers/monuments/{z}/{x}/{y}.grid.json?callback={cb}"
 			data-force-reload="true">
 			<div class="attribution">
 				&copy; <a href="http://opendata.paris.fr/">Ville de Paris</a> &copy;

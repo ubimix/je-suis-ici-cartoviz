@@ -24,7 +24,7 @@
      * Return a promise for the data loaded from the specified URL
      */
     function loadJson(url) {
-        var deferred = P.defer();
+        var deferred = Mosaic.Promise.defer();
         $.get(url, function(data) {
             deferred.resolve(data);
         }).fail(function(error) {
