@@ -8,7 +8,8 @@ function width(value) {
         return 0;
     return value;
 }
-module.exports = {
+
+var Utils = {
     extendStyle : function() {
         var result = {};
         _.each(arguments, function(style) {
@@ -51,5 +52,36 @@ module.exports = {
             }
         }
         return result;
+    },
+
+    getMarkerShadow : function(params) {
+        params = _.extend({}, {
+            maxZoom : 18,
+            minZoom : 16,
+            color : 'white',
+            width : 24,
+            opacity : 0.5
+        }, params);
+        var result = Utils.getMarkerZoomLevels({
+            'marker-width' : params.width,
+            'marker-opacity' : params.opacity,
+            'marker-line-width' : 0,
+            'marker-line-opacity' : 0,
+        }, {
+            maxZoom : params.maxZoom
+        });
+        result = Utils.extendStyle(result, {
+            'marker-placement' : 'point',
+            'marker-type' : 'ellipse',
+            'marker-allow-overlap' : true,
+            'marker-fill' : params.color,
+        });
+        result['[zoom<' + params.minZoom + ']'] = {
+            'marker-opacity' : 0
+        }
+        return result;
     }
+
 }
+
+module.exports = Utils;
