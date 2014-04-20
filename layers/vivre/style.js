@@ -28,7 +28,7 @@ var style = Utils.extendStyle({
         '[type="LaPoste"]' : {
             'marker-fill' : '#FFD700',
         },
-        '[type="Sanisette"][zoom>=16]' : {
+        '[type="Sanisette"]' : {
             'marker-fill' : '#29A5DC'
         },
 
