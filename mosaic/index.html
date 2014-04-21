@@ -50,27 +50,29 @@ html,body {
 	font-family: 'Lato', Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
+#list {
+	background-color: white;
+	position: absolute;
+	width: 25%;
+	top: 50px;
+	right: 0px;
+	bottom: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
 #map {
 	background-color: white;
 	position: absolute;
 	top: 50px;
 	left: 0px;
 	bottom: 0px;
-	right: 0px;
+	right: 25%;
 	background-color: #eee;
 }
 
-.panels {
-	position: absolute;
-	left: 25%;
-	right: 25%;
-	bottom: 0px;
-}
-
-.panels .panel .panel-body {
-	max-height: 200px;
-	overflow-y: auto;
-	overflow-x: hidden;
+.panel {
+	margin-bottom: 0;
 }
 
 .panel .panel-body h4 {
@@ -103,17 +105,6 @@ address {
 .leaflet-popup-content-wrapper .leaflet-popup-content .panel {
 	margin-bottom: 0;
 	border: none;
-}
-
-.panels .panel {
-	
-}
-
-@media ( max-width : 768px) {
-	.panels {
-		left: 1%;
-		right: 1%;
-	}
 }
 
 .leftbox {
@@ -175,6 +166,8 @@ p,h3 {
 		</div>
 	</div>
 
+	<div id="list"></div>
+
 	<div id="map" data-center="[2.336171865463257,48.865032363996]"
 		data-zoom="17" data-min-zoom="2" data-max-zoom="18">
 
@@ -183,6 +176,15 @@ p,h3 {
 			data-force-reload="true">
 			<div class="attribution">
 				Données &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>
+			</div>
+		</div>
+
+		<!-- TechOnMap  -->
+		<div data-map-layer="techonmap" data-visible="true"
+			data-source-url="./data/data.json" data-cluster-points="true"
+			data-force-reload="true">
+			<div class="attribution">
+				&copy; <a href="http://www.lafonderie-idf.fr/">La Fonderie</a>
 			</div>
 		</div>
 
@@ -221,11 +223,6 @@ p,h3 {
 	<div id="templates" style="display: none;">
 
 		<div id="ParentTemplate">
-			<script type="text/javascript" data-type="static">
-                ({
-
-                })
-            </script>
 			<script type="text/javascript">
                 ({
                     isValid : function(resource) {
@@ -271,14 +268,63 @@ p,h3 {
                             }
                         })
                         elm.html(str);
-                    }
+                    },
                 })
+            </script>
+		</div>
+
+		<div data-resource-type="Default" data-view="ListItemView"
+			data-extends="#ParentTemplate">
+			<div class="panel" data-action-click="activateResource">
+				<div class="panel-heading">
+					<span data-render="renderLabel"></span>
+				</div>
+				<div class="panel-body" data-render="hideBody">
+					<div class="row">
+						<div class="col-md-12">
+							<div data-render="renderDescription"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+                (
+                        {
+                            getLabel : function() {
+                                var resource = this.getResource();
+                                var label = resource.properties.label
+                                        || resource.properties.name;
+                                return label;
+                            },
+                            hideBody : function(elm) {
+                                this.$body = elm;
+                                this.$body.hide();
+                            },
+                            onActivateResource : function(e) {
+                                this.$body.show();
+                                var panel = this.$el.find('.panel');
+                                // panel.removeClass('panel-info');
+                                panel.addClass('panel-primary');
+                            },
+                            onDeactivateResource : function(e) {
+                                this.$body.hide();
+                                var panel = this.$el.find('.panel');
+                                // panel.addClass('panel-info');
+                                panel.removeClass('panel-primary');
+                            },
+                            onFocusResource : function(e) {
+                                // console.log('!!!FOCUSING!!!')
+                            },
+                            onBlurResource : function(e) {
+                                // console.log('!!!BLURRING!!!')
+                            },
+                        })
             </script>
 		</div>
 
 		<div data-resource-type="Default" data-view="MapFocusedPopupView"
 			data-extends="#ParentTemplate">
-			<div class="panel panel-default">
+			<div class="panel panel-info">
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
@@ -291,22 +337,22 @@ p,h3 {
 
 		<div data-resource-type="Velib" data-view="MapFocusedPopupView"
 			data-extends="#ParentTemplate">
-			<div class="panel panel-default">
+			<div class="panel panel-info">
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
 							<div data-action-click="activateResource">
 								<img src="../layers/svg/icones-pastille/velib-pastille.svg"
 									class="category-icon" /> Station Vélib n° <span
-									data-render="rendreVelibNumber">1</span>
+									data-render="renderVelibNumber">1</span>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<script>
+			<script type="text/javascript">
                 ({
-                    rendreVelibNumber : function(elm) {
+                    renderVelibNumber : function(elm) {
                         var resource = this.getResource();
                         elm.text('' + resource.properties.number);
                     },
@@ -319,16 +365,16 @@ p,h3 {
 		</div>
 		<div data-resource-type="Velib" data-view="MapActivePopupView"
 			data-extends="[data-resource-type='Velib'][data-view='MapFocusedPopupView']">
-			<div class="panel panel-default">
+			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<img src="../layers/svg/icones-pastille/velib-pastille.svg"
 						class="category-icon" /> Station Vélib n° <span
-						data-render="rendreVelibNumber">1</span>
+						data-render="renderVelibNumber">1</span>
 				</div>
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
-							<h4 data-render="renderLabel"></h4>
+							<span data-render="renderLabel"></span>
 							<address data-render="renderAddress">addr</address>
 						</div>
 					</div>
@@ -337,14 +383,14 @@ p,h3 {
 		</div>
 		<div data-resource-type="LaPoste" data-view="MapFocusedPopupView"
 			data-extends="#ParentTemplate">
-			<div class="panel panel-default">
+			<div class="panel panel-info">
 				<div class="panel-body" data-action-click="activateResource">
 					<img src="
 					../layers/svg/icones-pastille/laposte.svg"
 						class="category-icon" /> <span data-render="renderLabel">1</span>
 				</div>
 			</div>
-			<script>
+			<script type="text/javascript">
                 ({
                     getLabel : function() {
                         var resource = this.getResource();
@@ -355,7 +401,7 @@ p,h3 {
 		</div>
 		<div data-resource-type="LaPoste" data-view="MapActivePopupView"
 			data-extends="[data-resource-type='LaPoste'][data-view='MapFocusedPopupView']">
-			<div class="panel panel-default">
+			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<img src="../layers/svg/icones-pastille/laposte.svg"
 						class="category-icon" /> <span data-render="renderLabel">1</span>
@@ -363,13 +409,13 @@ p,h3 {
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12">
-							<h4 data-render="renderLabel"></h4>
+							<span data-render="renderLabel"></span>
 							<address data-render="renderAddress">addr</address>
 						</div>
 					</div>
 				</div>
 			</div>
-			<script>
+			<script type="text/javascript">
                 (
                         {
                             renderAddress : function(elm) {
@@ -388,8 +434,8 @@ p,h3 {
 			data-extends="#ParentTemplate">
 			<div style="white-space: nowrap;">
 				<i style="color: #C1108B;" class="fa fa-map-marker fa-2x"></i><i
-					class="fa fa-caret-left" style="color: gray;"></i><span
-					style="background-color: white; border: 1px solid gray; border-radius: 3px; padding: 0.1em 0.5em;"
+					class="fa fa-caret-left" style="color: silver;"></i><span
+					style="background-color: #eee; border: 1px solid silver; border-radius: 3px; padding: 0.1em 0.5em;"
 					data-render="renderLabel"></span>
 			</div>
 			<script type="text/javascript">
@@ -408,7 +454,7 @@ p,h3 {
 
 		<div data-resource-type="Entreprise" data-view="MapFocusedPopupView"
 			data-extends="#ParentTemplate">
-			<div class="panel panel-default" data-action-click="activateResource">
+			<div class="panel panel-info" data-action-click="activateResource">
 				<div class="panel-heading">
 					<span data-render="renderLabel"></span>
 				</div>
@@ -420,7 +466,7 @@ p,h3 {
 					</div>
 				</div>
 			</div>
-			<script>
+			<script type="text/javascript">
                 (
                         {
                             getLabel : function() {
@@ -444,9 +490,9 @@ p,h3 {
 		</div>
 		<div data-resource-type="Entreprise" data-view="MapActivePopupView"
 			data-extends="[data-resource-type='Entreprise'][data-view='MapFocusedPopupView']">
-			<div class="panel panel-default">
+			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h4 data-render="renderLabel"></h4>
+					<span data-render="renderLabel"></span>
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -469,7 +515,7 @@ p,h3 {
 					</div>
 				</div>
 			</div>
-			<script>
+			<script type="text/javascript">
                 ({
                     renderDescription : function(elm) {
                         var resource = this.getResource();
@@ -510,6 +556,5 @@ p,h3 {
 		</div>
 
 	</div>
-
 </body>
 </html>
