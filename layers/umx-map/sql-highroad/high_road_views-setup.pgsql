@@ -399,30 +399,30 @@ CREATE VIEW planet_osm_line_z15plus AS
       SELECT 'outline' AS render, 1 AS is_outline, 1 AS is_casing,
              way, highway, NULL AS railway, tunnel, bridge, layer
       FROM planet_osm_line
-      WHERE highway IN ('motorway', 'motorway_link')
-         OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
-         OR highway IN (/* 'residential',*/ 'unclassified', 'road', 'service', 'minor')
-         OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
+      WHERE highway IN ('motorway', 'motorway_link',
+        'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link',
+        /* 'residential',*/ 'unclassified', 'road', 'service', 'minor',
+        'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
     
       UNION
       
       SELECT 'casing' AS render, 0 AS is_outline, 1 AS is_casing,
              way, highway, NULL AS railway, tunnel, bridge, layer
       FROM planet_osm_line
-      WHERE highway IN ('motorway', 'motorway_link')
-         OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
-         OR highway IN (/* 'residential', */ 'unclassified', 'road', 'service', 'minor')
-         OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
+      WHERE highway IN ('motorway', 'motorway_link',
+        'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link',
+        /* 'residential', */ 'unclassified', 'road', 'service', 'minor',
+        'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
     
       UNION
       
       SELECT 'inline' AS render, 0 AS is_outline, 0 AS is_casing,
              way, highway, NULL AS railway, tunnel, bridge, layer
       FROM planet_osm_line
-      WHERE highway IN ('motorway', 'motorway_link')
-         OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
-         OR highway IN (/* 'residential', */ 'unclassified', 'road', 'service', 'minor')
-         OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
+      WHERE highway IN ('motorway', 'motorway_link',
+        'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link',
+        /* 'residential', */ 'unclassified', 'road', 'service', 'minor',
+        'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
     
       UNION
       

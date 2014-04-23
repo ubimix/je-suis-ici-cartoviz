@@ -1,6 +1,6 @@
-@water : #eee;
-@land : #666;
-@building: #333;
+@water : white;
+@land : #eee;
+@building: silver;
 
 /*ocean*/
 Map { font-directory: url(./fonts); }
