@@ -217,7 +217,7 @@ CREATE VIEW planet_osm_line_z12 AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'secondary', 'primary')
-         OR highway IN ('tertiary', 'residential', 'unclassified', 'road', 'unclassified')
+         OR highway IN ('tertiary', 'residential', 'unclassified', 'road')
     
       UNION
       
@@ -225,7 +225,7 @@ CREATE VIEW planet_osm_line_z12 AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'secondary', 'primary')
-         OR highway IN ('tertiary', 'residential', 'unclassified', 'road', 'unclassified')
+         OR highway IN ('tertiary', 'residential', 'unclassified', 'road')
 
   ) AS roads
 
@@ -262,7 +262,7 @@ CREATE VIEW planet_osm_line_z13 AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary')
-         OR highway IN ('residential', 'unclassified', 'road', 'unclassified')
+         OR highway IN ('residential', 'unclassified', 'road')
     
       UNION
       
@@ -270,7 +270,7 @@ CREATE VIEW planet_osm_line_z13 AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary')
-         OR highway IN ('residential', 'unclassified', 'road', 'unclassified')
+         OR highway IN ('residential', 'unclassified', 'road')
 
   ) AS roads
 
@@ -401,7 +401,7 @@ CREATE VIEW planet_osm_line_z15plus AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
-         OR highway IN ('residential', 'unclassified', 'road', 'unclassified', 'service', 'minor')
+         OR highway IN (/* 'residential',*/ 'unclassified', 'road', 'service', 'minor')
          OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
     
       UNION
@@ -411,7 +411,7 @@ CREATE VIEW planet_osm_line_z15plus AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
-         OR highway IN ('residential', 'unclassified', 'road', 'unclassified', 'service', 'minor')
+         OR highway IN (/* 'residential', */ 'unclassified', 'road', 'service', 'minor')
          OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
     
       UNION
@@ -421,7 +421,7 @@ CREATE VIEW planet_osm_line_z15plus AS
       FROM planet_osm_line
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
-         OR highway IN ('residential', 'unclassified', 'road', 'unclassified', 'service', 'minor')
+         OR highway IN (/* 'residential', */ 'unclassified', 'road', 'service', 'minor')
          OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
     
       UNION
@@ -469,7 +469,7 @@ CREATE VIEW planet_osm_line_z15plus_big AS
 CREATE VIEW planet_osm_line_z15plus_small AS
   SELECT *
   FROM planet_osm_line_z15plus
-  WHERE highway IN ('residential', 'unclassified', 'road', 'unclassified', 'service', 'minor')
+  WHERE highway IN ('residential', 'unclassified', 'road', 'service', 'minor')
      OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
   ORDER BY priority DESC;
 

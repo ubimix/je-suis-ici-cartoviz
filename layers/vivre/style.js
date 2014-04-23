@@ -52,7 +52,7 @@ var style = Utils.extendStyle({
 
     },
     '[zoom>=16]' : {
-        'marker-allow-overlap' : false,
+        'marker-allow-overlap' : true,
         'marker-file' : 'url(../svg/awsome/dot-circle-o.svg)',
         '[type="SpotWifi"]' : {
             'marker-file' : 'url(../svg/icone-2-avec/wifi.svg)',
