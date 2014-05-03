@@ -46,6 +46,9 @@
                 "id" : "z10-roads",
                 "name" : "z10-roads",
                 "class" : "roads",
+                "properties" : {
+                    "minzoom" : 3
+                },
                 "Datasource" : {
                     "type" : "postgis",
                     "dbname" : "osm-france",
@@ -53,6 +56,7 @@
                     "host" : "127.0.0.1",
                     "port" : 5432,
                     "geometry_field" : "way",
+                    "simplify_geometries" : true,
                     "estimate_extent" : false,
                     "extent" : "-20037508.34 -20037508.34 20037508.34 20037508.34",
                     "srs" : "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
@@ -63,6 +67,9 @@
                 "id" : "z11-roads",
                 "name" : "z11-roads",
                 "class" : "roads",
+                "properties" : {
+                    "minzoom" : 11
+                },
                 "Datasource" : {
                     "type" : "postgis",
                     "dbname" : "osm-france",
@@ -70,6 +77,7 @@
                     "host" : "127.0.0.1",
                     "port" : 5432,
                     "geometry_field" : "way",
+                    "simplify_geometries" : true,
                     "estimate_extent" : false,
                     "extent" : "-20037508.34 -20037508.34 20037508.34 20037508.34",
                     "srs" : "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
@@ -80,6 +88,9 @@
                 "id" : "z12-roads",
                 "name" : "z12-roads",
                 "class" : "roads",
+                "properties" : {
+                    "minzoom" : 12
+                },
                 "Datasource" : {
                     "type" : "postgis",
                     "dbname" : "osm-france",
@@ -88,6 +99,7 @@
                     "port" : 5432,
                     "geometry_field" : "way",
                     "estimate_extent" : false,
+                    "simplify_geometries" : true,
                     "extent" : "-20037508.34 -20037508.34 20037508.34 20037508.34",
                     "srs" : "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
                     "table" : "planet_osm_line_z12"
@@ -97,6 +109,9 @@
                 "id" : "z13-roads",
                 "name" : "z13-roads",
                 "class" : "roads",
+                "properties" : {
+                    "minzoom" : 13
+                },
                 "Datasource" : {
                     "type" : "postgis",
                     "dbname" : "osm-france",
@@ -104,6 +119,7 @@
                     "host" : "127.0.0.1",
                     "port" : 5432,
                     "geometry_field" : "way",
+                    "simplify_geometries" : true,
                     "estimate_extent" : false,
                     "extent" : "-20037508.34 -20037508.34 20037508.34 20037508.34",
                     "srs" : "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
@@ -114,6 +130,9 @@
                 "id" : "z14-roads",
                 "name" : "z14-roads",
                 "class" : "roads",
+                "properties" : {
+                    "minzoom" : 14
+                },
                 "Datasource" : {
                     "type" : "postgis",
                     "dbname" : "osm-france",
@@ -121,6 +140,7 @@
                     "host" : "127.0.0.1",
                     "port" : 5432,
                     "geometry_field" : "way",
+                    "simplify_geometries" : true,
                     "estimate_extent" : false,
                     "extent" : "-20037508.34 -20037508.34 20037508.34 20037508.34",
                     "srs" : "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
@@ -130,6 +150,9 @@
             {
                 "id" : "z15plus-roads",
                 "name" : "z15plus-roads",
+                "properties" : {
+                    "minzoom" : 15
+                },
                 "class" : "roads",
                 "Datasource" : {
                     "type" : "postgis",
@@ -138,6 +161,7 @@
                     "host" : "127.0.0.1",
                     "port" : 5432,
                     "geometry_field" : "way",
+                    "simplify_geometries" : true,
                     "estimate_extent" : false,
                     "extent" : "-20037508.34 -20037508.34 20037508.34 20037508.34",
                     "srs" : "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
