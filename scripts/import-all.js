@@ -9,8 +9,8 @@ var path = require('path');
 var imported = 0, total = 0;
 var dataDir = '../data/';
 
-if (process.argv.length < 4) {
-    console.log('Usage: node import-all.js user password');
+if (process.argv.length < 3) {
+    console.log('Usage: node import-all.js user [password]');
     process.exit();
 }
 var params = {
