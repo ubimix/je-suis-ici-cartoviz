@@ -149,6 +149,7 @@
             if (!id)
                 return;
             el.click(function(e) {
+                $(this).toggleClass('selected');
                 toggleLayer(id);
                 e.preventDefault();
                 e.stopPropagation();
