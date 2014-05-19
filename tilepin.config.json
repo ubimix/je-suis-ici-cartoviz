@@ -1,0 +1,14 @@
+{
+    "port" : 9876,
+    "db" : {
+        "*" : {
+            "dbname" : "je_suis_ici",
+            "user" : "postgres",
+            "host" : "localhost",
+            "port" : 5432
+        },
+        "layers/monuments" : {
+            "dbname" : "museomap"
+        }
+    }
+}

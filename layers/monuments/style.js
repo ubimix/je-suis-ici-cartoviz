@@ -41,5 +41,5 @@ var style = Utils.extendStyle({
 });
 
 module.exports = {
-    '#objects' : style
+    '.objects' : style
 }

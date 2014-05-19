@@ -3,7 +3,7 @@ node_modules
 *.dump
 *.cache
 *.zip
-project.tilepin.xml
+project.tilepin.*
 sql
 /data
 /photos

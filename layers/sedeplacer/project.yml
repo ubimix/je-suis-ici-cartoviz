@@ -1,5 +1,6 @@
 Layer:
     - name: objects
+      class: objects
 Stylesheet:
   - style.js
 attribution: Ubimix
